@@ -12,11 +12,11 @@
           "cap": "大盘",
           "capClass": "cap-lg",
           "cells": {
-            "pe":  {"v": "85.69%", "lv": "high", "est": false, "note": ""},
-            "pb":  {"v": "41.96%", "lv": "mid",  "est": false, "note": ""},
-            "div": {"v": "78.82%", "lv": "mid",  "est": false, "note": ""},
-            "rp1": {"v": "≈14%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "52.94%", "lv": "mid",  "est": false, "note": ""}
+            "pe":  {"v": "85.69%", "lv": "high", "est": false, "prevPct": 79.2, "note": ""},
+            "pb":  {"v": "41.96%", "lv": "mid",  "est": false, "prevPct": 40.1, "note": ""},
+            "div": {"v": "78.82%", "lv": "mid",  "est": false, "prevPct": 80.0, "note": ""},
+            "rp1": {"v": "≈14%",   "lv": "low",  "est": true,  "prevPct": 13.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "52.94%", "lv": "mid",  "est": false, "prevPct": 48.0, "note": ""}
           }
         },
         {
@@ -25,11 +25,11 @@
           "cap": "中盘",
           "capClass": "cap-mid",
           "cells": {
-            "pe":  {"v": "87.65%", "lv": "high", "est": false, "note": ""},
-            "pb":  {"v": "≈81%",   "lv": "high", "est": true,  "note": ""},
-            "div": {"v": "44.31%", "lv": "mid",  "est": false, "note": ""},
-            "rp1": {"v": "≈12%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "46.27%", "lv": "mid",  "est": false, "note": ""}
+            "pe":  {"v": "87.65%", "lv": "high", "est": false, "prevPct": 88.0, "note": ""},
+            "pb":  {"v": "≈81%",   "lv": "high", "est": true,  "prevPct": 75.0, "note": ""},
+            "div": {"v": "44.31%", "lv": "mid",  "est": false, "prevPct": 41.0, "note": ""},
+            "rp1": {"v": "≈12%",   "lv": "low",  "est": true,  "prevPct": 11.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "46.27%", "lv": "mid",  "est": false, "prevPct": 47.5, "note": ""}
           }
         },
         {
@@ -38,10 +38,10 @@
           "cap": "大盘",
           "capClass": "cap-lg",
           "cells": {
-            "pe":  {"v": "40.13%", "lv": "mid",  "est": false, "note": "2024-01至今"},
-            "pb":  {"v": "73.09%", "lv": "mid",  "est": false, "note": "2024-01至今"},
+            "pe":  {"v": "40.13%", "lv": "mid",  "est": false, "prevPct": 36.0, "note": "2024-01至今"},
+            "pb":  {"v": "73.09%", "lv": "mid",  "est": false, "prevPct": 70.0, "note": "2024-01至今"},
             "div": {"v": "—",      "lv": "na",   "est": false, "note": "2024-01至今 · 无数据"},
-            "rp1": {"v": "≈60%",   "lv": "mid",  "est": true,  "note": "2024-01至今 · 盈利收益率口径估算"},
+            "rp1": {"v": "≈60%",   "lv": "mid",  "est": true,  "prevPct": 58.0, "note": "2024-01至今 · 盈利收益率口径估算"},
             "rp2": {"v": "—",      "lv": "na",   "est": false, "note": "2024-01至今 · 无数据"}
           }
         },
@@ -51,11 +51,11 @@
           "cap": "大盘",
           "capClass": "cap-lg",
           "cells": {
-            "pe":  {"v": "85.29%", "lv": "high", "est": false, "note": ""},
-            "pb":  {"v": "51.37%", "lv": "mid",  "est": false, "note": ""},
-            "div": {"v": "75.29%", "lv": "mid",  "est": false, "note": ""},
-            "rp1": {"v": "≈15%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "49.80%", "lv": "mid",  "est": false, "note": ""}
+            "pe":  {"v": "85.29%", "lv": "high", "est": false, "prevPct": 82.0, "note": ""},
+            "pb":  {"v": "51.37%", "lv": "mid",  "est": false, "prevPct": 46.0, "note": ""},
+            "div": {"v": "75.29%", "lv": "mid",  "est": false, "prevPct": 77.0, "note": ""},
+            "rp1": {"v": "≈15%",   "lv": "low",  "est": true,  "prevPct": 14.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "49.80%", "lv": "mid",  "est": false, "prevPct": 44.0, "note": ""}
           }
         },
         {
@@ -64,11 +64,11 @@
           "cap": "全市场",
           "capClass": "cap-all",
           "cells": {
-            "pe":  {"v": "≈87%",   "lv": "high", "est": true,  "note": "全A代理·除金融未单列"},
-            "pb":  {"v": "≈47%",   "lv": "mid",  "est": true,  "note": ""},
-            "div": {"v": "≈35%",   "lv": "mid",  "est": true,  "note": "股息率分位估算"},
-            "rp1": {"v": "≈13%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈25%",   "lv": "low",  "est": true,  "note": "股息率口径估算"}
+            "pe":  {"v": "≈87%",   "lv": "high", "est": true,  "prevPct": 90.0, "note": "全A代理·除金融未单列"},
+            "pb":  {"v": "≈47%",   "lv": "mid",  "est": true,  "prevPct": 43.0, "note": ""},
+            "div": {"v": "≈35%",   "lv": "mid",  "est": true,  "prevPct": 28.0, "note": "股息率分位估算"},
+            "rp1": {"v": "≈13%",   "lv": "low",  "est": true,  "prevPct": 12.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "≈25%",   "lv": "low",  "est": true,  "prevPct": 22.0, "note": "股息率口径估算"}
           }
         }
       ]
@@ -83,11 +83,11 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "73.41%", "lv": "mid",  "est": false, "note": ""},
-            "pb":  {"v": "54.88%", "lv": "mid",  "est": false, "note": ""},
-            "div": {"v": "≈31%",   "lv": "mid",  "est": true,  "note": "2014-至今"},
-            "rp1": {"v": "≈27%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈62%",   "lv": "mid",  "est": true,  "note": ""}
+            "pe":  {"v": "73.41%", "lv": "mid",  "est": false, "prevPct": 71.0, "note": ""},
+            "pb":  {"v": "54.88%", "lv": "mid",  "est": false, "prevPct": 50.0, "note": ""},
+            "div": {"v": "≈31%",   "lv": "mid",  "est": true,  "prevPct": 24.0, "note": "2014-至今"},
+            "rp1": {"v": "≈27%",   "lv": "low",  "est": true,  "prevPct": 25.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "≈62%",   "lv": "mid",  "est": true,  "prevPct": 60.0, "note": ""}
           }
         },
         {
@@ -96,11 +96,11 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "82.38%", "lv": "high", "est": false, "note": ""},
-            "pb":  {"v": "51.16%", "lv": "mid",  "est": false, "note": ""},
-            "div": {"v": "≈99%",   "lv": "high", "est": true,  "note": "理杏仁·中位数"},
-            "rp1": {"v": "≈18%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "78.84%", "lv": "mid",  "est": false, "note": ""}
+            "pe":  {"v": "82.38%", "lv": "high", "est": false, "prevPct": 79.0, "note": ""},
+            "pb":  {"v": "51.16%", "lv": "mid",  "est": false, "prevPct": 47.0, "note": ""},
+            "div": {"v": "≈99%",   "lv": "high", "est": true,  "prevPct": 95.0, "note": "理杏仁·中位数"},
+            "rp1": {"v": "≈18%",   "lv": "low",  "est": true,  "prevPct": 16.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "78.84%", "lv": "mid",  "est": false, "prevPct": 73.0, "note": ""}
           }
         },
         {
@@ -109,11 +109,11 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "82.50%", "lv": "high", "est": false, "note": ""},
-            "pb":  {"v": "62.22%", "lv": "mid",  "est": false, "note": ""},
-            "div": {"v": "42.50%", "lv": "mid",  "est": false, "note": ""},
-            "rp1": {"v": "≈18%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "59.17%", "lv": "mid",  "est": false, "note": ""}
+            "pe":  {"v": "82.50%", "lv": "high", "est": false, "prevPct": 80.0, "note": ""},
+            "pb":  {"v": "62.22%", "lv": "mid",  "est": false, "prevPct": 58.0, "note": ""},
+            "div": {"v": "42.50%", "lv": "mid",  "est": false, "prevPct": 39.0, "note": ""},
+            "rp1": {"v": "≈18%",   "lv": "low",  "est": true,  "prevPct": 17.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "59.17%", "lv": "mid",  "est": false, "prevPct": 53.0, "note": ""}
           }
         },
         {
@@ -122,11 +122,11 @@
           "cap": "大盘",
           "capClass": "cap-lg",
           "cells": {
-            "pe":  {"v": "55.8%",  "lv": "mid",  "est": false, "note": "2026-07·Wind"},
-            "pb":  {"v": "≈35%",   "lv": "mid",  "est": true,  "note": "PB分位估算"},
-            "div": {"v": "≈38%",   "lv": "mid",  "est": true,  "note": "近三年口径"},
-            "rp1": {"v": "≈44%",   "lv": "mid",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈80%",   "lv": "high", "est": true,  "note": "股息率口径估算"}
+            "pe":  {"v": "55.8%",  "lv": "mid",  "est": false, "prevPct": 52.0, "note": "2026-07·Wind"},
+            "pb":  {"v": "≈35%",   "lv": "mid",  "est": true,  "prevPct": 31.0, "note": "PB分位估算"},
+            "div": {"v": "≈38%",   "lv": "mid",  "est": true,  "prevPct": 41.0, "note": "近三年口径"},
+            "rp1": {"v": "≈44%",   "lv": "mid",  "est": true,  "prevPct": 40.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "≈80%",   "lv": "high", "est": true,  "prevPct": 76.0, "note": "股息率口径估算"}
           }
         },
         {
@@ -135,11 +135,11 @@
           "cap": "中大盘",
           "capClass": "cap-mid",
           "cells": {
-            "pe":  {"v": "≈8%",    "lv": "low",  "est": true,  "note": "近五年分位1%~8%·近十年或略高"},
-            "pb":  {"v": "≈12%",   "lv": "low",  "est": true,  "note": "近五年分位4%·近十年或略高"},
-            "div": {"v": "≈60%",   "lv": "mid",  "est": true,  "note": "股息率分位"},
-            "rp1": {"v": "≈92%",   "lv": "high", "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈60%",   "lv": "mid",  "est": true,  "note": "股息率口径估算"}
+            "pe":  {"v": "≈8%",    "lv": "low",  "est": true,  "prevPct": 5.0,  "note": "近五年分位1%~8%·近十年或略高"},
+            "pb":  {"v": "≈12%",   "lv": "low",  "est": true,  "prevPct": 9.0,  "note": "近五年分位4%·近十年或略高"},
+            "div": {"v": "≈60%",   "lv": "mid",  "est": true,  "prevPct": 64.0, "note": "股息率分位"},
+            "rp1": {"v": "≈92%",   "lv": "high", "est": true,  "prevPct": 88.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "≈60%",   "lv": "mid",  "est": true,  "prevPct": 53.0, "note": "股息率口径估算"}
           }
         },
         {
@@ -148,11 +148,11 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "75.11%", "lv": "mid",  "est": false, "note": ""},
-            "pb":  {"v": "64.05%", "lv": "mid",  "est": false, "note": ""},
-            "div": {"v": "68.14%", "lv": "mid",  "est": false, "note": "2020-04至今"},
-            "rp1": {"v": "≈25%",   "lv": "low",  "est": true,  "note": "盈利收益率口径估算"},
-            "rp2": {"v": "54.38%", "lv": "mid",  "est": false, "note": ""}
+            "pe":  {"v": "75.11%", "lv": "mid",  "est": false, "prevPct": 72.0, "note": ""},
+            "pb":  {"v": "64.05%", "lv": "mid",  "est": false, "prevPct": 61.0, "note": ""},
+            "div": {"v": "68.14%", "lv": "mid",  "est": false, "prevPct": 70.0, "note": "2020-04至今"},
+            "rp1": {"v": "≈25%",   "lv": "low",  "est": true,  "prevPct": 23.0, "note": "盈利收益率口径估算"},
+            "rp2": {"v": "54.38%", "lv": "mid",  "est": false, "prevPct": 49.0, "note": ""}
           }
         }
       ]

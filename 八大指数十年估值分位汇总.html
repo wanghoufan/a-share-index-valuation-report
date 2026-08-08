@@ -178,6 +178,21 @@
   .cell-dd-deep{color:var(--green)}
   .cell-dd-extreme{color:#1a9f43}
   .cell-dd-na{color:var(--muted)}
+  /* 回撤列日期不换行 */
+  .dd-date{white-space:nowrap}
+  /* 回撤列"高点年龄"药丸：橙=当年或上年创高 / 绿=两年前及更早 */
+  .dd-age{
+    display:inline-block;font-size:10.5px;font-weight:600;
+    padding:1px 7px;border-radius:999px;margin-top:4px;line-height:1.5;
+  }
+  .dd-age.recent{
+    background:rgba(240,136,62,.18);color:#f0883e;
+    border:1px solid rgba(240,136,62,.35);
+  }
+  .dd-age.distant{
+    background:rgba(46,160,67,.18);color:var(--green);
+    border:1px solid rgba(46,160,67,.35);
+  }
 
   /* 窄屏（手机 / 小窗电脑 / 平板）：表格转卡片堆叠，列名从 data-label 读取 */
   @media(max-width:900px){
@@ -1143,7 +1158,7 @@
     });
   }
 
-  function cellHTML(f, c){
+  function cellHTML(f, c, r){
     const lab = f.label;
     if(c.lv === "na"){
       return `<td data-label="${lab}"><span class="cell-na">—</span>${c.note ? `<span class="est">${c.note}</span>` : ""}</td>`;
@@ -1153,7 +1168,10 @@
     const note = c.note ? `<span class="est">${c.note}</span>` : "";
     const dd = deltaHTML(c);
     const tdCls = dd.changed ? ' class="cell-changed"' : "";
-    return `<td data-label="${lab}"${tdCls}><span class="${CELL_CLS[c.lv]} ${cls}">${c.v}</span>${dd.badge}<small class="cls">${vt}</small>${note}</td>`;
+    // sparkline 仅出现在 PE / PB 单元格，且 history 有效（≥2 点）时才渲染
+    const showSpark = (f.key === "pe" || f.key === "pb") && Array.isArray(r.history) && r.history.length >= 2;
+    const spark = showSpark ? sparkSVG(r.history) : "";
+    return `<td data-label="${lab}"${tdCls}><span class="${CELL_CLS[c.lv]} ${cls}">${c.v}</span>${dd.badge}${spark}<small class="cls">${vt}</small>${note}</td>`;
   }
 
   // 迷你走势图（sparkline）：根据 history 数组画内联 SVG 折线；上升(更贵)=红，下降(更便宜)=绿
@@ -1201,24 +1219,39 @@
     const unit = r.priceUnit ? `<span class="dd-meta">${r.priceUnit}</span>` : "";
     return `<td data-label="当前收盘价"><span class="idxclose">${fmtNum(r.close)}</span>${unit}</td>`;
   }
-  // 距历史最高回撤列：大字幅度 + 小字 .dd-meta（最高价 + 日期），按分档加 class
+  // 高点年龄标签：按自然年划分，当年=近期，上一年=1年内，前两年=2年前……
+  function formatAge(athDate, now){
+    const nowYear = (now ? new Date(now) : new Date()).getFullYear();
+    const y = parseInt(String(athDate).slice(0, 4), 10);
+    if(isNaN(y)) return "";
+    const diff = nowYear - y;
+    if(diff <= 0) return "近期高点";
+    if(diff === 1) return "1年内高点";
+    if(diff === 2) return "2年前高点";
+    return diff + "年前高点";
+  }
+  // 距历史最高回撤列：大字幅度 + 小字 .dd-meta（最高价 + 日期）+ 高点年龄药丸，按分档加 class
   function ddHTML(r){
     if(r.close === null || r.close === undefined || r.ath === null || r.ath === undefined){
       return `<td data-label="距历史最高回撤" class="cell-dd-na"><span class="dd-main">—</span><span class="dd-meta">无数据源</span></td>`;
     }
     const dd = (r.close - r.ath) / r.ath * 100; // 负数
     const cls = ddTierClass(dd);
-    const meta = `最高 ${fmtNum(r.ath)}（${fmtAthDate(r.athDate)}）`;
+    // 日期单独包一层，避免 (2026-06) 在窄屏断成两行
+    const meta = `最高 ${fmtNum(r.ath)}<span class="dd-date">（${fmtAthDate(r.athDate)}）</span>`;
     const ddTxt = Math.abs(dd) < 0.05 ? "0.0%" : dd.toFixed(1) + "%"; // 避免 -0.0%
-    return `<td data-label="距历史最高回撤" class="${cls}"><span class="dd-main">${ddTxt}</span><span class="dd-meta">${meta}</span></td>`;
+    const now = new Date();
+    const ageYear = now.getFullYear() - parseInt(String(r.athDate).slice(0, 4), 10);
+    const ageCls = ageYear < 2 ? "recent" : "distant";
+    const ageLabel = formatAge(r.athDate, now);
+    return `<td data-label="距历史最高回撤" class="${cls}"><span class="dd-main">${ddTxt}</span><span class="dd-meta">${meta}</span><span class="dd-age ${ageCls}">${ageLabel}</span></td>`;
   }
 
   function rowHTML(r){
     const cap = r.cap ? `<span class="cap ${r.capClass}">${r.cap}</span>` : "";
-    const spark = sparkSVG(r.history);
-    const cells = FIELDS.map(f => cellHTML(f, r.cells[f.key])).join("");
+    const cells = FIELDS.map(f => cellHTML(f, r.cells[f.key], r)).join("");
     return `<tr>`
-      + `<td class="idxname">${r.name}${cap}${spark}<span class="grp">${r.code}</span></td>`
+      + `<td class="idxname">${r.name}${cap}<span class="grp">${r.code}</span></td>`
       + closeHTML(r)
       + ddHTML(r)
       + cells

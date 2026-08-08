@@ -6,23 +6,9 @@
 
 ## 网站预览
 
-> 以下为部署版页面的**真实截图**，自上而下展示：① 首页顶部 → ② 估值分位表格 → ③ 底部指数横向对比雷达图 → ④ 完整页面一览。
-
-**① 首页 / 顶部**
+> 以下为部署版页面的真实截图（首页 / 顶部）。
 
 ![首页顶部](screenshots/preview-hero.png)
-
-**② 估值分位表格（向下滚动）**
-
-![估值分位表格](screenshots/preview-table.png)
-
-**③ 底部：指数横向对比雷达图**
-
-![底部雷达图](screenshots/preview-bottom.png)
-
-**④ 完整页面一览**
-
-![完整页面](screenshots/preview-full.png)
 
 ## 指数清单
 

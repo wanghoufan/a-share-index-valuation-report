@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>八大指数十年估值分位汇总</title>
+<title>十一大指数十年估值分位汇总</title>
 <style>
   :root{
     --bg:#0e1116;
@@ -65,7 +65,7 @@
   .card h2 .bar{width:4px;height:18px;border-radius:2px;background:var(--accent)}
 
   table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px;table-layout:auto}
-  .table-scroll{width:100%;overflow-x:visible}
+  .table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
   thead th{
     background:var(--panel-2);color:var(--muted);font-weight:600;text-align:center;
     padding:10px 4px;border-bottom:1px solid var(--line);white-space:normal;font-size:12px;
@@ -120,18 +120,19 @@
   @media(max-width:900px){
     .table-scroll{overflow-x:visible}
     .table-scroll table{width:100%;min-width:0;margin:0}
-    .table-scroll thead{display:none}
-    .table-scroll tbody tr{display:block;border:1px solid var(--line);border-radius:12px;
+    /* 只对核心数据表做卡片堆叠；信息源(src-table)保持原表格 */
+    .table-scroll .data-table thead{display:none}
+    .table-scroll .data-table tbody tr{display:block;border:1px solid var(--line);border-radius:12px;
       margin-bottom:14px;padding:10px 12px;background:var(--panel-2)}
-    .table-scroll tbody td{display:block;width:100%;text-align:right;border-bottom:1px dashed var(--line);
+    .table-scroll .data-table tbody td{display:block;width:100%;text-align:right;border-bottom:1px dashed var(--line);
       padding:8px 2px;white-space:normal}
-    .table-scroll tbody tr td:last-child{border-bottom:none}
-    .table-scroll tbody td::before{content:"";float:left;color:var(--muted);font-weight:600;font-size:12px;text-align:left}
-    .table-scroll tbody td:nth-child(2)::before{content:"PE 十年分位"}
-    .table-scroll tbody td:nth-child(3)::before{content:"PB 十年分位"}
-    .table-scroll tbody td:nth-child(4)::before{content:"股息率 十年分位"}
-    .table-scroll tbody td:nth-child(5)::before{content:"风险溢价（10年市盈率）"}
-    .table-scroll tbody td:nth-child(6)::before{content:"风险溢价（十年股息率）"}
+    .table-scroll .data-table tbody tr td:last-child{border-bottom:none}
+    .table-scroll .data-table tbody td::before{content:"";float:left;color:var(--muted);font-weight:600;font-size:12px;text-align:left}
+    .table-scroll .data-table tbody td:nth-child(2)::before{content:"PE 十年分位"}
+    .table-scroll .data-table tbody td:nth-child(3)::before{content:"PB 十年分位"}
+    .table-scroll .data-table tbody td:nth-child(4)::before{content:"股息率 十年分位"}
+    .table-scroll .data-table tbody td:nth-child(5)::before{content:"风险溢价（10年市盈率）"}
+    .table-scroll .data-table tbody td:nth-child(6)::before{content:"风险溢价（十年股息率）"}
     .idxname{font-size:15px !important;text-align:left}
     .idxname::before{content:"" !important;display:none}
   }
@@ -169,7 +170,7 @@
 
     <div class="grp-title">宽基指数</div>
     <div class="table-scroll">
-    <table>
+    <table class="data-table">
       <thead>
         <tr>
           <th>指数（价格指数）</th>
@@ -227,7 +228,7 @@
 
     <div class="grp-title">红利指数</div>
     <div class="table-scroll">
-    <table>
+    <table class="data-table">
       <thead>
         <tr>
           <th>指数（价格指数）</th>

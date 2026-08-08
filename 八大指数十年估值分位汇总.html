@@ -81,14 +81,18 @@
   .cap-mid{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.35)}
   .cap-all{background:rgba(46,160,67,.15);color:var(--green);border:1px solid rgba(46,160,67,.35)}
 
-  .cell-low{background:var(--green-bg);color:#7ee29a;font-weight:600;border-radius:6px}
-  .cell-mid{background:var(--amber-bg);color:#e8c46a;font-weight:600;border-radius:6px}
-  .cell-high{background:var(--red-bg);color:#ff8a83;font-weight:600;border-radius:6px}
-  .cell-na{color:var(--muted)}
+  /* 分位：左侧色条替代药片圆角，保持表格行连续 */
+  .cell-low,.cell-mid,.cell-high{display:inline-block;font-weight:600;padding:2px 7px 2px 9px;
+    border-left:3px solid transparent;line-height:1.5}
+  .cell-low{color:#7ee29a;border-left-color:var(--green)}
+  .cell-mid{color:#e8c46a;border-left-color:var(--amber)}
+  .cell-high{color:#ff8a83;border-left-color:var(--red)}
+  .cell-na{color:var(--muted);display:inline-block;padding:2px 7px}
   .est{font-size:10.5px;color:var(--muted);font-weight:400;display:block;margin-top:1px}
+  .est-value{font-style:italic;color:#9fb4c9} /* 估算值统一高亮，便于筛选/区分 */
   .grp-title{font-size:13px;font-weight:600;color:var(--accent);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
   .grp-title::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--accent-2)}
-  .cls{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:1px}
+  .cls{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:1px}
 
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media(max-width:760px){.grid2{grid-template-columns:1fr}}
@@ -116,25 +120,22 @@
   footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:26px}
   .kbd{font-family:ui-monospace,monospace;background:var(--chip);border:1px solid var(--line);
        border-radius:5px;padding:1px 6px;font-size:11.5px;color:var(--accent)}
-  /* 窄屏（手机 / 小窗电脑 / 平板）：表格转卡片堆叠，彻底免横向滑动 */
+
+  /* 窄屏（手机 / 小窗电脑 / 平板）：表格转卡片堆叠，列名从 data-label 读取 */
   @media(max-width:900px){
     .table-scroll{overflow-x:visible}
     .table-scroll table{width:100%;min-width:0;margin:0}
-    /* 只对核心数据表做卡片堆叠；信息源(src-table)保持原表格 */
-    .table-scroll .data-table thead{display:none}
-    .table-scroll .data-table tbody tr{display:block;border:1px solid var(--line);border-radius:12px;
+    .table-scroll thead{display:none}
+    .table-scroll tbody tr{display:block;border:1px solid var(--line);border-radius:12px;
       margin-bottom:14px;padding:10px 12px;background:var(--panel-2)}
-    .table-scroll .data-table tbody td{display:block;width:100%;text-align:right;border-bottom:1px dashed var(--line);
+    .table-scroll tbody td{display:block;width:100%;text-align:right;border-bottom:1px dashed var(--line);
       padding:8px 2px;white-space:normal}
-    .table-scroll .data-table tbody tr td:last-child{border-bottom:none}
-    .table-scroll .data-table tbody td::before{content:"";float:left;color:var(--muted);font-weight:600;font-size:12px;text-align:left}
-    .table-scroll .data-table tbody td:nth-child(2)::before{content:"PE 十年分位"}
-    .table-scroll .data-table tbody td:nth-child(3)::before{content:"PB 十年分位"}
-    .table-scroll .data-table tbody td:nth-child(4)::before{content:"股息率 十年分位"}
-    .table-scroll .data-table tbody td:nth-child(5)::before{content:"风险溢价（10年市盈率）"}
-    .table-scroll .data-table tbody td:nth-child(6)::before{content:"风险溢价（十年股息率）"}
+    .table-scroll tbody tr td:last-child{border-bottom:none}
+    .table-scroll tbody td::before{content:attr(data-label);float:left;color:var(--muted);font-weight:600;font-size:12px;text-align:left}
+    .src-table td:first-child{white-space:normal}
     .idxname{font-size:15px !important;text-align:left}
     .idxname::before{content:"" !important;display:none}
+    .cls,.est{font-size:12px} /* 移动端字号提升，保证可读 */
   }
   @media(max-width:520px){
     body{padding:20px 10px 40px}
@@ -154,7 +155,8 @@
     <div class="sub">
       当前估值 <b>2026-08-06 / 07</b>（腾讯源） · 分位数据 <b>2026-07 ~ 08</b> 多源交叉验证<br>
       口径：PE = 市盈率 TTM ｜ 风险溢价 = 股息率 − 10Y 国债（≈1.72%~1.74%）｜ 分位 = 近十年历史分位<br>
-      覆盖：宽基 5 只（含万得全A除金融）＋ 红利 6 只（含标普红利低波50、红利质量）
+      覆盖：宽基 5 只（含万得全A除金融）＋ 红利 6 只（含标普红利低波50、红利质量）<br>
+      <span style="color:var(--muted)">注：颜色与文字双重标识分位等级（绿=偏低 / 黄=中性 / 红=偏高），不依赖颜色区分。</span>
     </div>
     <div class="legend">
       <span><i class="dot low"></i>分位 &lt;30% 偏低</span>
@@ -170,57 +172,57 @@
 
     <div class="grp-title">宽基指数</div>
     <div class="table-scroll">
-    <table class="data-table">
+    <table class="data-table" aria-label="宽基指数十年估值分位表">
       <thead>
         <tr>
-          <th>指数（价格指数）</th>
-          <th>PE<br>十年分位</th>
-          <th>PB<br>十年分位</th>
-          <th>股息率<br>十年分位</th>
-          <th>风险溢价<br>（10年市盈率）</th>
-          <th>风险溢价<br>（十年股息率）</th>
+          <th scope="col">指数（价格指数）</th>
+          <th scope="col">PE<br>十年分位</th>
+          <th scope="col">PB<br>十年分位</th>
+          <th scope="col">股息率<br>十年分位</th>
+          <th scope="col">风险溢价<br>（10年市盈率）</th>
+          <th scope="col">风险溢价<br>（十年股息率）</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="idxname">沪深300<span class="cap cap-lg">大盘</span><span class="grp">H00300 · 000300</span></td>
-          <td><span class="cell-high">85.69%</span><small class="cls">偏高 · 贵</small></td>
-          <td><span class="cell-mid">41.96%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">78.82%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-low">≈14%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">52.94%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PE 十年分位"><span class="cell-high">85.69%</span><small class="cls">偏高 · 贵</small></td>
+          <td data-label="PB 十年分位"><span class="cell-mid">41.96%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid">78.82%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈14%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid">52.94%</span><small class="cls">中性 · 一般</small></td>
         </tr>
         <tr>
           <td class="idxname">中证500<span class="cap cap-mid">中盘</span><span class="grp">H00905 · 000905</span></td>
-          <td><span class="cell-high">87.65%</span><small class="cls">偏高 · 贵</small></td>
-          <td><span class="cell-high">≈81%</span><small class="cls">偏高 · 贵</small></td>
-          <td><span class="cell-mid">44.31%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-low">≈12%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">46.27%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PE 十年分位"><span class="cell-high">87.65%</span><small class="cls">偏高 · 贵</small></td>
+          <td data-label="PB 十年分位"><span class="cell-high est-value">≈81%</span><small class="cls">偏高 · 贵</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid">44.31%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈12%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid">46.27%</span><small class="cls">中性 · 一般</small></td>
         </tr>
         <tr>
           <td class="idxname">中证A50<span class="cap cap-lg">大盘</span><span class="grp">930050</span></td>
-          <td><span class="cell-mid">40.13%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今</span></td>
-          <td><span class="cell-mid">73.09%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今</span></td>
-          <td><span class="cell-na">—</span><span class="est">2024-01至今 · 无数据</span></td>
-          <td><span class="cell-mid">≈60%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今 · 盈利收益率口径估算</span></td>
-          <td><span class="cell-na">—</span><span class="est">2024-01至今 · 无数据</span></td>
+          <td data-label="PE 十年分位"><span class="cell-mid">40.13%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今</span></td>
+          <td data-label="PB 十年分位"><span class="cell-mid">73.09%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今</span></td>
+          <td data-label="股息率 十年分位"><span class="cell-na">—</span><span class="est">2024-01至今 · 无数据</span></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-mid est-value">≈60%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今 · 盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-na">—</span><span class="est">2024-01至今 · 无数据</span></td>
         </tr>
         <tr>
           <td class="idxname">中证A500<span class="cap cap-lg">大盘</span><span class="grp">000510</span></td>
-          <td><span class="cell-high">85.29%</span><small class="cls">偏高 · 贵</small></td>
-          <td><span class="cell-mid">51.37%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">75.29%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-low">≈15%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">49.80%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PE 十年分位"><span class="cell-high">85.29%</span><small class="cls">偏高 · 贵</small></td>
+          <td data-label="PB 十年分位"><span class="cell-mid">51.37%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid">75.29%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈15%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid">49.80%</span><small class="cls">中性 · 一般</small></td>
         </tr>
         <tr>
           <td class="idxname">万得全A（除金融）<span class="cap cap-all">全市场</span><span class="grp">881003</span></td>
-          <td><span class="cell-high">≈87%</span><small class="cls">偏高 · 贵</small><span class="est">全A代理·除金融未单列</span></td>
-          <td><span class="cell-mid">≈47%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">≈35%</span><small class="cls">中性 · 一般</small><span class="est">股息率分位估算</span></td>
-          <td><span class="cell-low">≈13%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-low">≈25%</span><small class="cls">偏低 · 贵</small><span class="est">股息率口径估算</span></td>
+          <td data-label="PE 十年分位"><span class="cell-high est-value">≈87%</span><small class="cls">偏高 · 贵</small><span class="est">全A代理·除金融未单列</span></td>
+          <td data-label="PB 十年分位"><span class="cell-mid est-value">≈47%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid est-value">≈35%</span><small class="cls">中性 · 一般</small><span class="est">股息率分位估算</span></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈13%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-low est-value">≈25%</span><small class="cls">偏低 · 贵</small><span class="est">股息率口径估算</span></td>
         </tr>
       </tbody>
     </table>
@@ -228,70 +230,71 @@
 
     <div class="grp-title">红利指数</div>
     <div class="table-scroll">
-    <table class="data-table">
+    <table class="data-table" aria-label="红利指数十年估值分位表">
       <thead>
         <tr>
-          <th>指数（价格指数）</th>
-          <th>PE<br>十年分位</th>
-          <th>PB<br>十年分位</th>
-          <th>股息率<br>十年分位</th>
-          <th>风险溢价<br>（10年市盈率）</th>
-          <th>风险溢价<br>（十年股息率）</th>
+          <th scope="col">指数（价格指数）</th>
+          <th scope="col">PE<br>十年分位</th>
+          <th scope="col">PB<br>十年分位</th>
+          <th scope="col">股息率<br>十年分位</th>
+          <th scope="col">风险溢价<br>（10年市盈率）</th>
+          <th scope="col">风险溢价<br>（十年股息率）</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="idxname">红利低波<span class="grp">H20269 · H30269</span></td>
-          <td><span class="cell-mid">73.41%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">54.88%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">≈31%</span><small class="cls">中性 · 一般</small><span class="est">2014-至今</span></td>
-          <td><span class="cell-low">≈27%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">≈62%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PE 十年分位"><span class="cell-mid">73.41%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PB 十年分位"><span class="cell-mid">54.88%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid est-value">≈31%</span><small class="cls">中性 · 一般</small><span class="est">2014-至今</span></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈27%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid est-value">≈62%</span><small class="cls">中性 · 一般</small></td>
         </tr>
         <tr>
           <td class="idxname">300红利低波<span class="grp">H20740 · 930740</span></td>
-          <td><span class="cell-high">82.38%</span><small class="cls">偏高 · 贵</small></td>
-          <td><span class="cell-mid">51.16%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-high">≈99%</span><small class="cls">偏高 · 便宜</small><span class="est">理杏仁·中位数</span></td>
-          <td><span class="cell-low">≈18%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">78.84%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PE 十年分位"><span class="cell-high">82.38%</span><small class="cls">偏高 · 贵</small></td>
+          <td data-label="PB 十年分位"><span class="cell-mid">51.16%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-high est-value">≈99%</span><small class="cls">偏高 · 便宜</small><span class="est">理杏仁·中位数</span></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈18%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid">78.84%</span><small class="cls">中性 · 一般</small></td>
         </tr>
         <tr>
           <td class="idxname">红利低波100<span class="grp">H20955 · 930955</span></td>
-          <td><span class="cell-high">82.50%</span><small class="cls">偏高 · 贵</small></td>
-          <td><span class="cell-mid">62.22%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">42.50%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-low">≈18%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">59.17%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PE 十年分位"><span class="cell-high">82.50%</span><small class="cls">偏高 · 贵</small></td>
+          <td data-label="PB 十年分位"><span class="cell-mid">62.22%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid">42.50%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈18%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid">59.17%</span><small class="cls">中性 · 一般</small></td>
         </tr>
         <tr>
           <td class="idxname">标普中国A股大盘红利低波50<span class="cap cap-lg">大盘</span><span class="grp">SPCLLHCP · 515450</span></td>
-          <td><span class="cell-mid">55.8%</span><small class="cls">中性 · 一般</small><span class="est">2026-07·Wind</span></td>
-          <td><span class="cell-mid">≈35%</span><small class="cls">中性 · 一般</small><span class="est">PB分位估算</span></td>
-          <td><span class="cell-mid">≈38%</span><small class="cls">中性 · 一般</small><span class="est">近三年口径</span></td>
-          <td><span class="cell-mid">≈44%</span><small class="cls">中性 · 一般</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-high">≈80%</span><small class="cls">偏高 · 便宜</small><span class="est">股息率口径估算</span></td>
+          <td data-label="PE 十年分位"><span class="cell-mid">55.8%</span><small class="cls">中性 · 一般</small><span class="est">2026-07·Wind</span></td>
+          <td data-label="PB 十年分位"><span class="cell-mid est-value">≈35%</span><small class="cls">中性 · 一般</small><span class="est">PB分位估算</span></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid est-value">≈38%</span><small class="cls">中性 · 一般</small><span class="est">近三年口径</span></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-mid est-value">≈44%</span><small class="cls">中性 · 一般</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-high est-value">≈80%</span><small class="cls">偏高 · 便宜</small><span class="est">股息率口径估算</span></td>
         </tr>
         <tr>
           <td class="idxname">红利质量<span class="cap cap-mid">中大盘</span><span class="grp">931468</span></td>
-          <td><span class="cell-low">≈8%</span><small class="cls">偏低 · 便宜</small><span class="est">近五年分位1%~8%·近十年或略高</span></td>
-          <td><span class="cell-low">≈12%</span><small class="cls">偏低 · 便宜</small><span class="est">近五年分位4%·近十年或略高</span></td>
-          <td><span class="cell-mid">≈60%</span><small class="cls">中性 · 一般</small><span class="est">股息率分位</span></td>
-          <td><span class="cell-high">≈92%</span><small class="cls">偏高 · 便宜</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">≈60%</span><small class="cls">中性 · 一般</small><span class="est">股息率口径估算</span></td>
+          <td data-label="PE 十年分位"><span class="cell-low est-value">≈8%</span><small class="cls">偏低 · 便宜</small><span class="est">近五年分位1%~8%·近十年或略高</span></td>
+          <td data-label="PB 十年分位"><span class="cell-low est-value">≈12%</span><small class="cls">偏低 · 便宜</small><span class="est">近五年分位4%·近十年或略高</span></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid est-value">≈60%</span><small class="cls">中性 · 一般</small><span class="est">股息率分位</span></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-high est-value">≈92%</span><small class="cls">偏高 · 便宜</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid est-value">≈60%</span><small class="cls">中性 · 一般</small><span class="est">股息率口径估算</span></td>
         </tr>
         <tr>
           <td class="idxname">东证红利低波<span class="grp">921446 · 931446</span></td>
-          <td><span class="cell-mid">75.11%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">64.05%</span><small class="cls">中性 · 一般</small></td>
-          <td><span class="cell-mid">68.14%</span><small class="cls">中性 · 一般</small><span class="est">2020-04至今</span></td>
-          <td><span class="cell-low">≈25%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
-          <td><span class="cell-mid">54.38%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PE 十年分位"><span class="cell-mid">75.11%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="PB 十年分位"><span class="cell-mid">64.05%</span><small class="cls">中性 · 一般</small></td>
+          <td data-label="股息率 十年分位"><span class="cell-mid">68.14%</span><small class="cls">中性 · 一般</small><span class="est">2020-04至今</span></td>
+          <td data-label="风险溢价（10年市盈率）"><span class="cell-low est-value">≈25%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td data-label="风险溢价（十年股息率）"><span class="cell-mid">54.38%</span><small class="cls">中性 · 一般</small></td>
         </tr>
       </tbody>
     </table>
     </div>
-    <p class="note">* 分类规则：分位 &lt;30% 偏低、30%~80% 中性、&gt;80% 偏高。贵贱判断——PE/PB 分位越高越贵；股息率/风险溢价 分位越高越便宜。风险溢价（10年市盈率）≈ 100% − PE十年分位（盈利收益率 1/PE − 10Y国债 的十年分位，国债扰动小，按 PE 分位反推估算）；风险溢价（十年股息率）= 股息率 − 10Y国债（≈1.73%）的十年分位。300红利低波股息率分位为理杏仁「中位数」口径，与其余 TTM 口径不完全可比。</p>
+
+    <p class="note">* 分类规则：分位 &lt;30% 偏低、30%~80% 中性、&gt;80% 偏高。贵贱判断——PE/PB 分位越高越贵；股息率/风险溢价 分位越高越便宜。风险溢价（10年市盈率）≈ 100% − PE十年分位（盈利收益率 1/PE − 10Y国债 的十年分位，国债扰动小，按 PE 分位反推估算）；风险溢价（十年股息率）= 股息率 − 10Y国债（≈1.73%）的十年分位。300红利低波股息率分位为理杏仁「中位数」口径，与其余 TTM 口径不完全可比。<span class="est-value">斜体数值为估算值</span>。</p>
 
     <p class="note">* 中证A50（2024-01成立）上市不足十年，表中采用 2024-01 至今的可用历史分位；东证红利低波（2020-04成立）股息率分位采用 2020-04 至今；红利低波股息率分位来自公开源的 2014-至今 长周期口径。分位均为公开源估算，仅供区间参考。</p>
 
@@ -335,10 +338,10 @@
   <!-- 交叉验证 -->
   <section class="card">
     <h2><i class="bar"></i>三、交叉验证</h2>
-    <ul class="verdict" style="list-style:none">
-      <li style="padding:6px 0 6px 16px;position:relative"><span style="position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span><b>当前值（稳定）</b>：腾讯 <span class="kbd">westock-data</span> Skill 返回的 PE/股息率，与公开行情表「A股行情指标」(2026-08-06) 逐项一致（930955/930740/H30269/931446/930050/000510 全部对齐）✓</li>
-      <li style="padding:6px 0 6px 16px;position:relative"><span style="position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span><b>分位（区间参考）</b>：PE 分位在 Wind / 理杏仁 / 雪球 / 同花顺 多源间收敛（如 930955 在 82%~84%、931446 在 69%~75%）；风险溢价有 Wind 与雪球两套口径（930955：59% vs 72%），差异来自日期与国债取值。</li>
-      <li style="padding:6px 0 6px 16px;position:relative"><span style="position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span><b>一致性校验</b>：红利类"PE分位高+股息率分位低"与"涨价摊薄股息"自洽；宽基"PE分位高+股息率分位中高"与"低利率推升分红相对吸引力"自洽。</li>
+    <ul class="verdict">
+      <li><b>当前值（稳定）</b>：腾讯 <span class="kbd">westock-data</span> Skill 返回的 PE/股息率，与公开行情表「A股行情指标」(2026-08-06) 逐项一致（930955/930740/H30269/931446/930050/000510 全部对齐）✓</li>
+      <li><b>分位（区间参考）</b>：PE 分位在 Wind / 理杏仁 / 雪球 / 同花顺 多源间收敛（如 930955 在 82%~84%、931446 在 69%~75%）；风险溢价有 Wind 与雪球两套口径（930955：59% vs 72%），差异来自日期与国债取值。</li>
+      <li><b>一致性校验</b>：红利类"PE分位高+股息率分位低"与"涨价摊薄股息"自洽；宽基"PE分位高+股息率分位中高"与"低利率推升分红相对吸引力"自洽。</li>
     </ul>
   </section>
 
@@ -346,17 +349,17 @@
   <section class="card">
     <h2><i class="bar"></i>四、信息源</h2>
     <div class="table-scroll">
-    <table class="src-table">
+    <table class="src-table" aria-label="数据信息源表">
       <thead>
-        <tr><th>来源</th><th>用途</th><th>稳定性</th></tr>
+        <tr><th scope="col">来源</th><th scope="col">用途</th><th scope="col">稳定性</th></tr>
       </thead>
       <tbody>
-        <tr><td>腾讯 westock-data（Skill）</td><td>当前 PE / PB / 股息率截面（qt.gtimg.cn）</td><td><span class="st s1">稳定·实时</span></td></tr>
-        <tr><td>「A股行情指标」公开行情表</td><td>当前值 + PE/PB 十年分位</td><td><span class="st s1">与 Skill 对齐</span></td></tr>
-        <tr><td>Wind 经媒体披露（腾讯新闻/搜狐）</td><td>风险溢价、股息率分位</td><td><span class="st s2">二手·日期敏感</span></td></tr>
-        <tr><td>理杏仁</td><td>931446 股息率分位、930740/931446 PE 分位</td><td><span class="st s2">需登录·抓摘要</span></td></tr>
-        <tr><td>雪球</td><td>红利类风险溢价、各指数 PE 分位播报</td><td><span class="st s2">多作者·口径不一</span></td></tr>
-        <tr><td>同花顺 / 富途牛牛</td><td>交叉验证、H30269 长周期利差/股息率分位</td><td><span class="st s2">二手</span></td></tr>
+        <tr><td data-label="来源">腾讯 westock-data（Skill）</td><td data-label="用途">当前 PE / PB / 股息率截面（qt.gtimg.cn）</td><td data-label="稳定性"><span class="st s1">稳定·实时</span></td></tr>
+        <tr><td data-label="来源">「A股行情指标」公开行情表</td><td data-label="用途">当前值 + PE/PB 十年分位</td><td data-label="稳定性"><span class="st s1">与 Skill 对齐</span></td></tr>
+        <tr><td data-label="来源">Wind 经媒体披露（腾讯新闻/搜狐）</td><td data-label="用途">风险溢价、股息率分位</td><td data-label="稳定性"><span class="st s2">二手·日期敏感</span></td></tr>
+        <tr><td data-label="来源">理杏仁</td><td data-label="用途">931446 股息率分位、930740/931446 PE 分位</td><td data-label="稳定性"><span class="st s2">需登录·抓摘要</span></td></tr>
+        <tr><td data-label="来源">雪球</td><td data-label="用途">红利类风险溢价、各指数 PE 分位播报</td><td data-label="稳定性"><span class="st s2">多作者·口径不一</span></td></tr>
+        <tr><td data-label="来源">同花顺 / 富途牛牛</td><td data-label="用途">交叉验证、H30269 长周期利差/股息率分位</td><td data-label="稳定性"><span class="st s2">二手</span></td></tr>
       </tbody>
     </table>
     </div>

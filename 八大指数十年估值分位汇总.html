@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八大指数十年估值分位汇总</title>
+<style>
+  :root{
+    --bg:#0e1116;
+    --panel:#161b22;
+    --panel-2:#1c2230;
+    --line:#2a3140;
+    --txt:#e6edf3;
+    --muted:#8b97a7;
+    --accent:#39d0ff;
+    --accent-2:#7c8cff;
+    --green:#2ea043;
+    --green-bg:rgba(46,160,67,.16);
+    --amber:#d29922;
+    --amber-bg:rgba(210,153,34,.16);
+    --red:#f85149;
+    --red-bg:rgba(248,81,73,.16);
+    --chip:#222b39;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 80% -10%,rgba(57,208,255,.10),transparent 60%),
+               radial-gradient(900px 500px at 0% 0%,rgba(124,140,255,.10),transparent 55%),
+               var(--bg);
+    color:var(--txt);
+    font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+    line-height:1.6;
+    padding:32px 16px 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto}
+  header.head{
+    border:1px solid var(--line);
+    background:linear-gradient(135deg,var(--panel),var(--panel-2));
+    border-radius:16px;
+    padding:26px 28px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.head::after{
+    content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;
+    background:radial-gradient(circle,rgba(57,208,255,.25),transparent 70%);
+  }
+  .tag{display:inline-block;font-size:12px;letter-spacing:.12em;color:var(--accent);
+       border:1px solid rgba(57,208,255,.35);border-radius:999px;padding:3px 12px;margin-bottom:12px}
+  h1{font-size:26px;font-weight:700;letter-spacing:.02em}
+  .sub{color:var(--muted);font-size:13.5px;margin-top:8px}
+  .sub b{color:var(--txt);font-weight:600}
+
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:18px 0 4px;font-size:12.5px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .dot.low{background:var(--green)} .dot.mid{background:var(--amber)} .dot.high{background:var(--red)}
+
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px;margin-top:22px;
+  }
+  .card h2{font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+  .card h2 .bar{width:4px;height:18px;border-radius:2px;background:var(--accent)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px;table-layout:auto}
+  .table-scroll{width:100%;overflow-x:visible}
+  thead th{
+    background:var(--panel-2);color:var(--muted);font-weight:600;text-align:center;
+    padding:10px 4px;border-bottom:1px solid var(--line);white-space:normal;font-size:12px;
+    line-height:1.45
+  }
+  tbody td{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line);white-space:normal;vertical-align:top}
+  tbody tr:hover{background:rgba(57,208,255,.05)}
+  .idxname{text-align:left !important;font-weight:600}
+  .idxcode{color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+  .grp{color:var(--muted);font-size:11.5px;display:block;margin-top:2px}
+  .cap{display:inline-block;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:999px;margin-left:3px;vertical-align:middle}
+  .cap-lg{background:rgba(57,208,255,.15);color:var(--accent);border:1px solid rgba(57,208,255,.35)}
+  .cap-mid{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.35)}
+  .cap-all{background:rgba(46,160,67,.15);color:var(--green);border:1px solid rgba(46,160,67,.35)}
+
+  .cell-low{background:var(--green-bg);color:#7ee29a;font-weight:600;border-radius:6px}
+  .cell-mid{background:var(--amber-bg);color:#e8c46a;font-weight:600;border-radius:6px}
+  .cell-high{background:var(--red-bg);color:#ff8a83;font-weight:600;border-radius:6px}
+  .cell-na{color:var(--muted)}
+  .est{font-size:10.5px;color:var(--muted);font-weight:400;display:block;margin-top:1px}
+  .grp-title{font-size:13px;font-weight:600;color:var(--accent);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+  .grp-title::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--accent-2)}
+  .cls{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:1px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .verdict{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--panel-2)}
+  .verdict h3{font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .verdict .pill{font-size:11px;padding:2px 9px;border-radius:999px;font-weight:600}
+  .pill.warn{background:var(--amber-bg);color:var(--amber)}
+  .pill.ok{background:var(--green-bg);color:var(--green)}
+  .verdict ul{list-style:none;margin-top:6px}
+  .verdict li{font-size:13px;color:#cdd6e2;padding:5px 0 5px 16px;position:relative}
+  .verdict li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .verdict li b{color:var(--txt)}
+
+  .src-table td{text-align:left}
+  .src-table td:first-child{color:var(--accent);white-space:nowrap;font-weight:600}
+  .src-table .st{font-size:11px;padding:1px 8px;border-radius:6px;white-space:nowrap}
+  .st.s1{background:var(--green-bg);color:var(--green)}
+  .st.s2{background:var(--amber-bg);color:var(--amber)}
+
+  .note{font-size:12.5px;color:var(--muted);background:var(--panel-2);border:1px dashed var(--line);
+        border-radius:10px;padding:14px 16px;margin-top:14px}
+  .note b{color:var(--txt)}
+  .note li{margin:5px 0 5px 16px}
+  .note.compose{font-size:11.5px;line-height:1.7;margin-top:10px}
+  footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:26px}
+  .kbd{font-family:ui-monospace,monospace;background:var(--chip);border:1px solid var(--line);
+       border-radius:5px;padding:1px 6px;font-size:11.5px;color:var(--accent)}
+  /* 窄屏（手机 / 小窗电脑 / 平板）：表格转卡片堆叠，彻底免横向滑动 */
+  @media(max-width:900px){
+    .table-scroll{overflow-x:visible}
+    .table-scroll table{width:100%;min-width:0;margin:0}
+    .table-scroll thead{display:none}
+    .table-scroll tbody tr{display:block;border:1px solid var(--line);border-radius:12px;
+      margin-bottom:14px;padding:10px 12px;background:var(--panel-2)}
+    .table-scroll tbody td{display:block;width:100%;text-align:right;border-bottom:1px dashed var(--line);
+      padding:8px 2px;white-space:normal}
+    .table-scroll tbody tr td:last-child{border-bottom:none}
+    .table-scroll tbody td::before{content:"";float:left;color:var(--muted);font-weight:600;font-size:12px;text-align:left}
+    .table-scroll tbody td:nth-child(2)::before{content:"PE 十年分位"}
+    .table-scroll tbody td:nth-child(3)::before{content:"PB 十年分位"}
+    .table-scroll tbody td:nth-child(4)::before{content:"股息率 十年分位"}
+    .table-scroll tbody td:nth-child(5)::before{content:"风险溢价（10年市盈率）"}
+    .table-scroll tbody td:nth-child(6)::before{content:"风险溢价（十年股息率）"}
+    .idxname{font-size:15px !important;text-align:left}
+    .idxname::before{content:"" !important;display:none}
+  }
+  @media(max-width:520px){
+    body{padding:20px 10px 40px}
+    .card{padding:18px 14px}
+    header.head{padding:20px 16px}
+    h1{font-size:21px}
+    .legend{gap:10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <span class="tag">指数估值 · 十年分位报告</span>
+    <h1>十一大指数十年估值分位汇总</h1>
+    <div class="sub">
+      当前估值 <b>2026-08-06 / 07</b>（腾讯源） · 分位数据 <b>2026-07 ~ 08</b> 多源交叉验证<br>
+      口径：PE = 市盈率 TTM ｜ 风险溢价 = 股息率 − 10Y 国债（≈1.72%~1.74%）｜ 分位 = 近十年历史分位<br>
+      覆盖：宽基 5 只（含万得全A除金融）＋ 红利 6 只（含标普红利低波50、红利质量）
+    </div>
+    <div class="legend">
+      <span><i class="dot low"></i>分位 &lt;30% 偏低</span>
+      <span><i class="dot mid"></i>30% ~ 80% 中性</span>
+      <span><i class="dot high"></i>&gt;80% 偏高</span>
+      <span>PE/PB 越高越贵 · 股息率/风险溢价 越高越便宜</span>
+    </div>
+  </header>
+
+  <!-- 核心数据表 -->
+  <section class="card">
+    <h2><i class="bar"></i>一、核心数据表</h2>
+
+    <div class="grp-title">宽基指数</div>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>指数（价格指数）</th>
+          <th>PE<br>十年分位</th>
+          <th>PB<br>十年分位</th>
+          <th>股息率<br>十年分位</th>
+          <th>风险溢价<br>（10年市盈率）</th>
+          <th>风险溢价<br>（十年股息率）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="idxname">沪深300<span class="cap cap-lg">大盘</span><span class="grp">H00300 · 000300</span></td>
+          <td><span class="cell-high">85.69%</span><small class="cls">偏高 · 贵</small></td>
+          <td><span class="cell-mid">41.96%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">78.82%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-low">≈14%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">52.94%</span><small class="cls">中性 · 一般</small></td>
+        </tr>
+        <tr>
+          <td class="idxname">中证500<span class="cap cap-mid">中盘</span><span class="grp">H00905 · 000905</span></td>
+          <td><span class="cell-high">87.65%</span><small class="cls">偏高 · 贵</small></td>
+          <td><span class="cell-high">≈81%</span><small class="cls">偏高 · 贵</small></td>
+          <td><span class="cell-mid">44.31%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-low">≈12%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">46.27%</span><small class="cls">中性 · 一般</small></td>
+        </tr>
+        <tr>
+          <td class="idxname">中证A50<span class="cap cap-lg">大盘</span><span class="grp">930050</span></td>
+          <td><span class="cell-mid">40.13%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今</span></td>
+          <td><span class="cell-mid">73.09%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今</span></td>
+          <td><span class="cell-na">—</span><span class="est">2024-01至今 · 无数据</span></td>
+          <td><span class="cell-mid">≈60%</span><small class="cls">中性 · 一般</small><span class="est">2024-01至今 · 盈利收益率口径估算</span></td>
+          <td><span class="cell-na">—</span><span class="est">2024-01至今 · 无数据</span></td>
+        </tr>
+        <tr>
+          <td class="idxname">中证A500<span class="cap cap-lg">大盘</span><span class="grp">000510</span></td>
+          <td><span class="cell-high">85.29%</span><small class="cls">偏高 · 贵</small></td>
+          <td><span class="cell-mid">51.37%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">75.29%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-low">≈15%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">49.80%</span><small class="cls">中性 · 一般</small></td>
+        </tr>
+        <tr>
+          <td class="idxname">万得全A（除金融）<span class="cap cap-all">全市场</span><span class="grp">881003</span></td>
+          <td><span class="cell-high">≈87%</span><small class="cls">偏高 · 贵</small><span class="est">全A代理·除金融未单列</span></td>
+          <td><span class="cell-mid">≈47%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">≈35%</span><small class="cls">中性 · 一般</small><span class="est">股息率分位估算</span></td>
+          <td><span class="cell-low">≈13%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-low">≈25%</span><small class="cls">偏低 · 贵</small><span class="est">股息率口径估算</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="grp-title">红利指数</div>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>指数（价格指数）</th>
+          <th>PE<br>十年分位</th>
+          <th>PB<br>十年分位</th>
+          <th>股息率<br>十年分位</th>
+          <th>风险溢价<br>（10年市盈率）</th>
+          <th>风险溢价<br>（十年股息率）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="idxname">红利低波<span class="grp">H20269 · H30269</span></td>
+          <td><span class="cell-mid">73.41%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">54.88%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">≈31%</span><small class="cls">中性 · 一般</small><span class="est">2014-至今</span></td>
+          <td><span class="cell-low">≈27%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">≈62%</span><small class="cls">中性 · 一般</small></td>
+        </tr>
+        <tr>
+          <td class="idxname">300红利低波<span class="grp">H20740 · 930740</span></td>
+          <td><span class="cell-high">82.38%</span><small class="cls">偏高 · 贵</small></td>
+          <td><span class="cell-mid">51.16%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-high">≈99%</span><small class="cls">偏高 · 便宜</small><span class="est">理杏仁·中位数</span></td>
+          <td><span class="cell-low">≈18%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">78.84%</span><small class="cls">中性 · 一般</small></td>
+        </tr>
+        <tr>
+          <td class="idxname">红利低波100<span class="grp">H20955 · 930955</span></td>
+          <td><span class="cell-high">82.50%</span><small class="cls">偏高 · 贵</small></td>
+          <td><span class="cell-mid">62.22%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">42.50%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-low">≈18%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">59.17%</span><small class="cls">中性 · 一般</small></td>
+        </tr>
+        <tr>
+          <td class="idxname">标普中国A股大盘红利低波50<span class="cap cap-lg">大盘</span><span class="grp">SPCLLHCP · 515450</span></td>
+          <td><span class="cell-mid">55.8%</span><small class="cls">中性 · 一般</small><span class="est">2026-07·Wind</span></td>
+          <td><span class="cell-mid">≈35%</span><small class="cls">中性 · 一般</small><span class="est">PB分位估算</span></td>
+          <td><span class="cell-mid">≈38%</span><small class="cls">中性 · 一般</small><span class="est">近三年口径</span></td>
+          <td><span class="cell-mid">≈44%</span><small class="cls">中性 · 一般</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-high">≈80%</span><small class="cls">偏高 · 便宜</small><span class="est">股息率口径估算</span></td>
+        </tr>
+        <tr>
+          <td class="idxname">红利质量<span class="cap cap-mid">中大盘</span><span class="grp">931468</span></td>
+          <td><span class="cell-low">≈8%</span><small class="cls">偏低 · 便宜</small><span class="est">近五年分位1%~8%·近十年或略高</span></td>
+          <td><span class="cell-low">≈12%</span><small class="cls">偏低 · 便宜</small><span class="est">近五年分位4%·近十年或略高</span></td>
+          <td><span class="cell-mid">≈60%</span><small class="cls">中性 · 一般</small><span class="est">股息率分位</span></td>
+          <td><span class="cell-high">≈92%</span><small class="cls">偏高 · 便宜</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">≈60%</span><small class="cls">中性 · 一般</small><span class="est">股息率口径估算</span></td>
+        </tr>
+        <tr>
+          <td class="idxname">东证红利低波<span class="grp">921446 · 931446</span></td>
+          <td><span class="cell-mid">75.11%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">64.05%</span><small class="cls">中性 · 一般</small></td>
+          <td><span class="cell-mid">68.14%</span><small class="cls">中性 · 一般</small><span class="est">2020-04至今</span></td>
+          <td><span class="cell-low">≈25%</span><small class="cls">偏低 · 贵</small><span class="est">盈利收益率口径估算</span></td>
+          <td><span class="cell-mid">54.38%</span><small class="cls">中性 · 一般</small></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">* 分类规则：分位 &lt;30% 偏低、30%~80% 中性、&gt;80% 偏高。贵贱判断——PE/PB 分位越高越贵；股息率/风险溢价 分位越高越便宜。风险溢价（10年市盈率）≈ 100% − PE十年分位（盈利收益率 1/PE − 10Y国债 的十年分位，国债扰动小，按 PE 分位反推估算）；风险溢价（十年股息率）= 股息率 − 10Y国债（≈1.73%）的十年分位。300红利低波股息率分位为理杏仁「中位数」口径，与其余 TTM 口径不完全可比。</p>
+
+    <p class="note">* 中证A50（2024-01成立）上市不足十年，表中采用 2024-01 至今的可用历史分位；东证红利低波（2020-04成立）股息率分位采用 2020-04 至今；红利低波股息率分位来自公开源的 2014-至今 长周期口径。分位均为公开源估算，仅供区间参考。</p>
+
+    <p class="note compose"><b>宽基指数编制组成（小字说明）：</b></p>
+    <div class="note compose">
+      <ul>
+        <li><b>沪深300</b>：沪深两市市值大、流动性最好的前 300 只龙头股，覆盖约 A 股 60% 总市值，代表大盘蓝筹。</li>
+        <li><b>中证500</b>：剔除沪深300后，按总市值排名 301–800 的中盘股（平均市值约 200–330 亿），代表中盘。</li>
+        <li><b>中证A50</b>：各一级行业市值最大的 50 只龙头（"核心资产"），2024-01-02 发布。</li>
+        <li><b>中证A500</b>：剔除沪深300后，覆盖各行业市值前段（每行业≥1只），约 77% 权重来自沪深300、18% 来自中证500，官方定位"大盘宽基"，市值中位数约 500 亿。</li>
+        <li><b>万得全A（除金融）</b>：覆盖全部 A 股、剔除金融板块（银行/券商/保险等）后的全市场表征指数。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 估值结论 -->
+  <section class="card">
+    <h2><i class="bar"></i>二、估值结论</h2>
+    <div class="grid2">
+      <div class="verdict">
+        <h3>红利类（6只）<span class="pill warn">不便宜 · 仍有安全垫</span></h3>
+        <ul>
+          <li>PE 分位分化明显：红利低波/300红利低波/红利低波100 <b>73%~83%（偏贵）</b>，标普红利低波50 <b>55.8%（一般）</b>，红利质量 PE 分位 <b>≈8%（便宜）</b>；PB 分位 35%~64%（一般），多数仍在破净边缘。</li>
+          <li>股息率口径风险溢价 <b>54%~79%（一般~便宜）</b>：相对 10Y 国债（≈1.73%）票息优势仍在，但盈利收益率口径风险溢价已 <b>18%~27%（偏贵）</b>，说明估值不低。</li>
+          <li>股息率分位 <b>31%~99%（一般~便宜）</b>：300红利低波股息率相对自身历史最高，但其余红利指数股息率仅为历史中等水平。</li>
+          <li><b>结论</b>：属"配置区"而非"极便宜击球区"，靠票息+低波防御。东证红利低波相对最便宜，300红利低波股息率保护最厚。</li>
+        </ul>
+      </div>
+      <div class="verdict">
+        <h3>宽基类（5只）<span class="pill ok">估值不低 · 利差偏优</span></h3>
+        <ul>
+          <li>沪深300 / 中证500 / 中证A500 的 PE 十年分位 <b>85%~88%（偏贵）</b>；中证A50 因 2024-01 成立、可用历史短，PE 分位 <b>40.13%（一般）</b>；万得全A（除金融）PE 分位 <b>≈87%（偏贵）</b>。</li>
+          <li>股息率分位 <b>44%~79%（一般）</b>：低利率下分红补偿仍优于历史常态。</li>
+          <li>股息率口径风险溢价 <b>46%~53%（一般）</b>；盈利收益率口径风险溢价 <b>12%~15%（偏贵）</b>：股债性价比中性，盈利估值并不便宜。</li>
+          <li><b>结论</b>：更靠"盈利修复+分红"驱动，非低估值。中证A50（2024-01成立）参考有限。宜做底仓，不宜追高。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 交叉验证 -->
+  <section class="card">
+    <h2><i class="bar"></i>三、交叉验证</h2>
+    <ul class="verdict" style="list-style:none">
+      <li style="padding:6px 0 6px 16px;position:relative"><span style="position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span><b>当前值（稳定）</b>：腾讯 <span class="kbd">westock-data</span> Skill 返回的 PE/股息率，与公开行情表「A股行情指标」(2026-08-06) 逐项一致（930955/930740/H30269/931446/930050/000510 全部对齐）✓</li>
+      <li style="padding:6px 0 6px 16px;position:relative"><span style="position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span><b>分位（区间参考）</b>：PE 分位在 Wind / 理杏仁 / 雪球 / 同花顺 多源间收敛（如 930955 在 82%~84%、931446 在 69%~75%）；风险溢价有 Wind 与雪球两套口径（930955：59% vs 72%），差异来自日期与国债取值。</li>
+      <li style="padding:6px 0 6px 16px;position:relative"><span style="position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span><b>一致性校验</b>：红利类"PE分位高+股息率分位低"与"涨价摊薄股息"自洽；宽基"PE分位高+股息率分位中高"与"低利率推升分红相对吸引力"自洽。</li>
+    </ul>
+  </section>
+
+  <!-- 信息源 -->
+  <section class="card">
+    <h2><i class="bar"></i>四、信息源</h2>
+    <div class="table-scroll">
+    <table class="src-table">
+      <thead>
+        <tr><th>来源</th><th>用途</th><th>稳定性</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>腾讯 westock-data（Skill）</td><td>当前 PE / PB / 股息率截面（qt.gtimg.cn）</td><td><span class="st s1">稳定·实时</span></td></tr>
+        <tr><td>「A股行情指标」公开行情表</td><td>当前值 + PE/PB 十年分位</td><td><span class="st s1">与 Skill 对齐</span></td></tr>
+        <tr><td>Wind 经媒体披露（腾讯新闻/搜狐）</td><td>风险溢价、股息率分位</td><td><span class="st s2">二手·日期敏感</span></td></tr>
+        <tr><td>理杏仁</td><td>931446 股息率分位、930740/931446 PE 分位</td><td><span class="st s2">需登录·抓摘要</span></td></tr>
+        <tr><td>雪球</td><td>红利类风险溢价、各指数 PE 分位播报</td><td><span class="st s2">多作者·口径不一</span></td></tr>
+        <tr><td>同花顺 / 富途牛牛</td><td>交叉验证、H30269 长周期利差/股息率分位</td><td><span class="st s2">二手</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- 局限 -->
+  <section class="card">
+    <h2><i class="bar"></i>五、重要说明 / 局限</h2>
+    <div class="note">
+      <ul>
+        <li><b>连接器全部 disconnected</b>：Wind / 东方财富妙想 / 同花顺 iFinD 等均未登录、无账号充值，无法调用付费权威十年序列；以上分位均为<b>公开源估算</b>，口径/日期不同，<b>非稳定通道</b>，仅供区间参考。</li>
+        <li><b>"十年分位"边界</b>：中证A50（2024-01）、东证红利低波（2020-04）、300红利低波（2018-12）上市均不足十年，表中已按实际可获取的最长区间标注（如 2024-01 至今、2020-04 至今），不可严格等同十年。</li>
+        <li><b>新增三指数数据口径</b>：①<b>万得全A（除金融）</b>免费源仅披露"万得全A(881001)"，除金融剔除低估值银行后实际 PE/PB 及分位或更高，表中以全A代理并标注；其股息率/风险溢价（股息率）分位为估算。②<b>标普中国A股大盘红利低波50</b>：PE 分位 55.8% 来自 Wind/华泰柏瑞(2026-07)，PB 分位与股息率分位为估算或近三年口径。③<b>红利质量(931468)</b>：公开源仅获"近五年"估值分位（PE≈1%~8%、PB≈4%），十年分位以近五年极值近似，仅作参考。</li>
+        <li>风险溢价口径 = 股息率 − 10Y 国债；不同源国债取值（1.72%~1.83%）会令分位浮动数个百分点。</li>
+        <li>所有数据<b>不构成投资建议</b>；估值分位随行情每日变动。</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>生成方式：当前值经 westock-data Skill（腾讯源）稳定获取；分位经 WebSearch 多源公开数据交叉验证 · 数据截至 2026-08-07</footer>
+
+</div>
+</body>
+</html>

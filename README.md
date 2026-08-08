@@ -178,7 +178,7 @@ flowchart LR
 
 ```
 .
-├── 八大指数十年估值分位汇总.html   # 主报告（单页、响应式、可打印，JS 读取下方 JSON 渲染）
+├── index.html                     # 主报告（单页、响应式、可打印，JS 读取下方 JSON 渲染；Vercel 部署入口）
 ├── data.json                      # 估值数据（唯一数据源，更新只改这里）
 ├── 八大指数十年估值分位汇总.md     # 数据明细与结论文本版
 ├── README.md                      # 本说明
@@ -187,12 +187,23 @@ flowchart LR
 
 ## 本地查看
 
-- **直接看（推荐，零配置）**：用 WorkBuddy 预览打开，或直接双击 `八大指数十年估值分位汇总.html` 即可看到数据。页面内置一份兜底数据，当 `fetch('./data.json')` 因跨域/路径失败（如 `file://` 或预览隔离路由）时自动启用，保证任何打开方式都能渲染。
-- **改数据实时生效**：若希望编辑 `data.json` 后页面立即反映（而非用内嵌兜底），需经 HTTP 访问——在目录下起本地服务器：`python -m http.server 8000`，浏览器访问 `http://localhost:8000/八大指数十年估值分位汇总.html`。
+- **直接看（推荐，零配置）**：用 WorkBuddy 预览打开，或直接双击 `index.html` 即可看到数据。页面内置一份兜底数据，当 `fetch('./data.json')` 因跨域/路径失败（如 `file://` 或预览隔离路由）时自动启用，保证任何打开方式都能渲染。
+- **改数据实时生效**：若希望编辑 `data.json` 后页面立即反映（而非用内嵌兜底），需经 HTTP 访问——在目录下起本地服务器：`python -m http.server 8000`，浏览器访问 `http://localhost:8000/index.html`。
 
 > 数据权威源是 `data.json`；内嵌兜底仅用于离线/隔离场景，更新请改 `data.json` 并重新生成内嵌块（或经 HTTP 访问）。
 
 页面为响应式，手机端自动转为卡片堆叠布局、无横向滚动。
+
+## 部署到 Vercel（连 GitHub 自动部署）
+
+仓库已按静态站点配置：主报告为根目录 `index.html`，并附 `vercel.json`（`buildCommand` 为空、`outputDirectory` 为 `.`、`framework: null`）。
+
+1. 打开 [Vercel](https://vercel.com) → **Add New → Project** → 导入本 GitHub 仓库 `a-share-index-valuation-report`。
+2. Framework Preset 选 **Other**（或不改，`vercel.json` 已禁用框架检测），无需 Build Command，Output Directory 为仓库根 `.`。
+3. 点击 **Deploy**。完成后每次 `git push` 到 `master` 都会**自动重新部署**，vercel.app 域名即时更新。
+4. 本地预览同样用 `python -m http.server` 起服务访问 `index.html`，或直接双击 `index.html`。
+
+> 提示：页面 `fetch('./data.json')` 在静态托管（含 Vercel）下可正常取数；即便失败也有内嵌兜底，任何环境都能渲染。
 
 ## 更新记录
 

@@ -52,6 +52,15 @@
   h1{font-size:26px;font-weight:700;letter-spacing:.02em}
   .sub{color:var(--muted);font-size:13.5px;margin-top:8px}
   .sub b{color:var(--txt);font-weight:600}
+  .freshness{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+    padding:5px 13px;border-radius:999px;border:1px solid;margin-top:14px;line-height:1.4}
+  .freshness::before{content:"";width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .freshness.fresh{color:var(--green);border-color:rgba(46,160,67,.4);background:var(--green-bg)}
+  .freshness.fresh::before{background:var(--green)}
+  .freshness.warn{color:var(--amber);border-color:rgba(210,153,34,.4);background:var(--amber-bg)}
+  .freshness.warn::before{background:var(--amber)}
+  .freshness.stale{color:var(--red);border-color:rgba(248,81,73,.4);background:var(--red-bg)}
+  .freshness.stale::before{background:var(--red)}
 
   .legend{display:flex;flex-wrap:wrap;gap:14px;margin:18px 0 4px;font-size:12.5px;color:var(--muted)}
   .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -162,6 +171,7 @@
       覆盖：宽基 5 只（含万得全A除金融）＋ 红利 6 只（含标普红利低波50、红利质量）<br>
       <span>注：颜色与文字双重标识分位等级（绿=偏低 / 黄=中性 / 红=偏高），不依赖颜色区分。</span>
     </div>
+    <div id="freshness" class="freshness">数据加载中…</div>
     <div class="legend">
       <span><i class="dot low"></i>分位 &lt;30% 偏低</span>
       <span><i class="dot mid"></i>30% ~ 80% 中性</span>
@@ -303,6 +313,7 @@
 <script id="embed-data" type="application/json">
 {
   "updated": "2026-08-07",
+  "dataDate": "2026-08-07",
   "groups": [
     {
       "key": "broad",
@@ -501,11 +512,28 @@
   }
 
   function render(data){
+    renderFreshness(data);
     const map = {broad:"broad-body", dividend:"dividend-body"};
     data.groups.forEach(g=>{
       const tbody = document.getElementById(map[g.key]);
       if(tbody) tbody.innerHTML = g.rows.map(rowHTML).join("");
     });
+  }
+
+  // 数据时效指示器：<7天 新鲜(绿) / 7-30天 注意(黄) / >30天 过期(红)
+  function renderFreshness(data){
+    const el = document.getElementById("freshness");
+    if(!el || !data.dataDate) return;
+    const FRESH = 7, MAXAGE = 30;
+    const d = new Date(data.dataDate + "T00:00:00");
+    if(isNaN(d.getTime())){ el.className = "freshness warn"; el.textContent = "数据日期无效：" + data.dataDate; return; }
+    const days = Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
+    let cls, level;
+    if(days < FRESH){ cls = "fresh"; level = "新鲜"; }
+    else if(days <= MAXAGE){ cls = "warn"; level = "注意 · 稍旧"; }
+    else { cls = "stale"; level = "已过期"; }
+    el.className = "freshness " + cls;
+    el.textContent = "数据更新于 " + data.dataDate + " · 距今 " + days + " 天 · " + level;
   }
 
   function showHint(msg){

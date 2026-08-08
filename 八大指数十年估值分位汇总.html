@@ -139,6 +139,26 @@
   .note b{color:var(--txt)}
   .note li{margin:5px 0 5px 16px}
   .note.compose{font-size:11.5px;line-height:1.7;margin-top:10px}
+
+  /* 雷达图：6 指数 × 4 维度 十年分位对比（纯 SVG，零依赖，离线可用） */
+  .radar-hint{color:var(--muted);font-size:12.5px;margin:2px 0 12px}
+  .radar-hint b{color:var(--txt)}
+  .radar-wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center}
+  .radar-canvas{flex:1 1 300px;min-width:260px}
+  #radar{width:100%;height:auto;max-width:520px;display:block;margin:0 auto;overflow:visible}
+  .radar-legend{flex:1 1 190px;display:flex;flex-direction:column;gap:7px;min-width:170px}
+  .radar-legend .item{display:flex;align-items:center;gap:9px;padding:7px 11px;border:1px solid var(--line);
+    border-radius:9px;background:var(--panel-2);cursor:pointer;font-size:13px;user-select:none;transition:opacity .15s,border-color .15s}
+  .radar-legend .item:hover{border-color:var(--accent)}
+  .radar-legend .item.off{opacity:.38;text-decoration:line-through}
+  .radar-legend .sw{width:13px;height:13px;border-radius:3px;flex:0 0 auto}
+  .radar-grid{stroke:var(--line);fill:none;stroke-width:1}
+  .radar-axis{stroke:var(--line);stroke-width:1}
+  .radar-axis-label{fill:var(--muted);font-size:12px}
+  .radar-ring-label{fill:var(--muted);font-size:9px;opacity:.7}
+  .radar-series{transition:opacity .2s}
+  .radar-series.off{opacity:0;pointer-events:none}
+  .radar-dot{stroke:var(--bg);stroke-width:1.2}
   .hint{display:none;font-size:12.5px;color:#ffb454;background:rgba(255,180,84,.10);
         border:1px solid rgba(255,180,84,.35);border-radius:10px;padding:12px 16px;margin-top:14px}
   footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:26px}
@@ -314,6 +334,16 @@
         <li>风险溢价口径 = 股息率 − 10Y 国债；不同源国债取值（1.72%~1.83%）会令分位浮动数个百分点。</li>
         <li>所有数据<b>不构成投资建议</b>；估值分位随行情每日变动。</li>
       </ul>
+    </div>
+  </section>
+
+  <!-- 雷达图对比 -->
+  <section class="card">
+    <h2><i class="bar"></i>六、指数横向对比 · 雷达图</h2>
+    <p class="radar-hint"><b>外圈 = 分位更高</b>：PE / PB 轴越外越贵，股息率 / 风险溢价轴越外越便宜。点击右侧图例可显隐对应指数。</p>
+    <div class="radar-wrap">
+      <div class="radar-canvas"><svg id="radar" viewBox="0 0 580 520" role="img" aria-label="核心指数估值分位雷达图"></svg></div>
+      <div class="radar-legend" id="radar-legend"></div>
     </div>
   </section>
 
@@ -532,6 +562,115 @@
     };
   }
 
+  // 雷达图：6 个核心指数 × 4 维度（十年分位）横向对比，纯 SVG 绘制，零依赖、离线可用
+  const RADAR = {
+    names: ["沪深300","中证500","中证A500","万得全A（除金融）","红利低波","红利质量"],
+    colors: {
+      "沪深300":"#39d0ff","中证500":"#7c8cff","中证A50":"#f0883e",
+      "中证A500":"#56d364","红利低波":"#bc8cff","红利质量":"#ffd33d"
+    },
+    axes: [
+      {key:"pe",  label:"PE 分位"},
+      {key:"pb",  label:"PB 分位"},
+      {key:"div", label:"股息率 分位"},
+      {key:"rp2", label:"风险溢价 分位"}
+    ]
+  };
+
+  function renderRadar(data){
+    const svg = document.getElementById("radar");
+    const legend = document.getElementById("radar-legend");
+    if(!svg || !legend) return;
+    const NS = "http://www.w3.org/2000/svg";
+    const byName = {};
+    data.groups.forEach(g => g.rows.forEach(r => { byName[r.name] = r.cells; }));
+
+    const cx = 290, cy = 260, R = 160, n = RADAR.axes.length;
+    const angle = i => (-90 + i * (360 / n)) * Math.PI / 180; // 0 轴在正上方
+    const pt = (i, pct) => [cx + Math.cos(angle(i)) * R * pct / 100, cy + Math.sin(angle(i)) * R * pct / 100];
+
+    svg.innerHTML = "";
+    // 网格环 25/50/75/100
+    [25,50,75,100].forEach(p => {
+      const pts = RADAR.axes.map((_, i) => pt(i, p).join(",")).join(" ");
+      const poly = document.createElementNS(NS, "polygon");
+      poly.setAttribute("points", pts);
+      poly.setAttribute("class", "radar-grid");
+      svg.appendChild(poly);
+      if(p < 100){
+        const [lx, ly] = pt(0, p);
+        const t = document.createElementNS(NS, "text");
+        t.setAttribute("x", lx + 4); t.setAttribute("y", ly + 3);
+        t.setAttribute("class", "radar-ring-label");
+        t.textContent = p + "%";
+        svg.appendChild(t);
+      }
+    });
+    // 轴线 + 轴标签
+    RADAR.axes.forEach((ax, i) => {
+      const [x, y] = pt(i, 100);
+      const line = document.createElementNS(NS, "line");
+      line.setAttribute("x1", cx); line.setAttribute("y1", cy);
+      line.setAttribute("x2", x); line.setAttribute("y2", y);
+      line.setAttribute("class", "radar-axis");
+      svg.appendChild(line);
+      const [lx, ly] = pt(i, 118);
+      const t = document.createElementNS(NS, "text");
+      t.setAttribute("x", lx); t.setAttribute("y", ly);
+      t.setAttribute("class", "radar-axis-label");
+      t.setAttribute("text-anchor", i === 0 ? "middle" : (i === 1 ? "start" : (i === 2 ? "middle" : "end")));
+      t.textContent = ax.label;
+      svg.appendChild(t);
+    });
+    // 各指数多边形
+    RADAR.names.forEach(name => {
+      const cells = byName[name];
+      if(!cells) return;
+      const color = RADAR.colors[name];
+      const vals = RADAR.axes.map(a => { const c = cells[a.key]; const p = c ? parsePct(c.v) : 0; return p === null ? 0 : p; });
+      const pts = vals.map((v, i) => pt(i, v).join(",")).join(" ");
+      const g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "radar-series");
+      g.dataset.name = name;
+      const poly = document.createElementNS(NS, "polygon");
+      poly.setAttribute("points", pts);
+      poly.setAttribute("fill", color);
+      poly.setAttribute("fill-opacity", "0.13");
+      poly.setAttribute("stroke", color);
+      poly.setAttribute("stroke-width", "2");
+      poly.setAttribute("stroke-linejoin", "round");
+      g.appendChild(poly);
+      vals.forEach((v, i) => {
+        const [x, y] = pt(i, v);
+        const d = document.createElementNS(NS, "circle");
+        d.setAttribute("cx", x); d.setAttribute("cy", y); d.setAttribute("r", "3");
+        d.setAttribute("fill", color);
+        d.setAttribute("class", "radar-dot");
+        g.appendChild(d);
+      });
+      svg.appendChild(g);
+    });
+    // 图例（点击显隐对应指数）
+    legend.innerHTML = "";
+    RADAR.names.forEach(name => {
+      const item = document.createElement("div");
+      item.className = "item";
+      item.dataset.name = name;
+      const sw = document.createElement("span");
+      sw.className = "sw";
+      sw.style.backgroundColor = RADAR.colors[name];
+      const txt = document.createElement("span");
+      txt.textContent = name;
+      item.appendChild(sw); item.appendChild(txt);
+      item.addEventListener("click", () => {
+        item.classList.toggle("off");
+        const g = svg.querySelector('g.radar-series[data-name="' + name + '"]');
+        if(g) g.classList.toggle("off");
+      });
+      legend.appendChild(item);
+    });
+  }
+
   function cellHTML(f, c){
     const lab = f.label;
     if(c.lv === "na"){
@@ -558,6 +697,7 @@
       const tbody = document.getElementById(map[g.key]);
       if(tbody) tbody.innerHTML = g.rows.map(rowHTML).join("");
     });
+    renderRadar(data);
   }
 
   // 数据时效指示器：<7天 新鲜(绿) / 7-30天 注意(黄) / >30天 过期(红)

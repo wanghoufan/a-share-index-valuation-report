@@ -81,9 +81,11 @@
     padding:10px 4px;border-bottom:1px solid var(--line);white-space:normal;font-size:12px;
     line-height:1.45
   }
-  tbody td{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line);white-space:normal;vertical-align:top}
+  .data-table tbody td{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line);white-space:normal;vertical-align:top}
   tbody tr:hover{background:rgba(57,208,255,.05)}
   .idxname{text-align:left !important;font-weight:600}
+  .spark{display:inline-block;vertical-align:middle;margin-left:8px;width:84px;height:26px;flex:0 0 auto;opacity:.92}
+  .spark polyline{vector-effect:non-scaling-stroke}
   .idxcode{color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
   .grp{color:var(--muted);font-size:11.5px;display:block;margin-top:2px}
   .cap{display:inline-block;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:999px;margin-left:3px;vertical-align:middle}
@@ -165,6 +167,18 @@
   .kbd{font-family:ui-monospace,monospace;background:var(--chip);border:1px solid var(--line);
        border-radius:5px;padding:1px 6px;font-size:11.5px;color:var(--accent)}
 
+  /* 当前收盘价 & 距历史最高回撤（新增两列） */
+  .idxclose{display:block;font-weight:700;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.3}
+  .dd-main{display:block;font-weight:700;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.3;color:inherit}
+  .dd-meta{display:block;font-size:10.5px;color:var(--muted);font-weight:400;margin-top:2px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  /* 回撤 5 档颜色：0~-10% 红 / -10~-20% 黄 / -20~-30% 浅绿 / -30~-40% 绿 / < -40% 深绿 */
+  .cell-dd-shallow{color:var(--red)}
+  .cell-dd-mild{color:var(--amber)}
+  .cell-dd-moderate{color:#7ee29a}
+  .cell-dd-deep{color:var(--green)}
+  .cell-dd-extreme{color:#1a9f43}
+  .cell-dd-na{color:var(--muted)}
+
   /* 窄屏（手机 / 小窗电脑 / 平板）：表格转卡片堆叠，列名从 data-label 读取 */
   @media(max-width:900px){
     .table-scroll{overflow-x:visible}
@@ -224,6 +238,8 @@
       <thead>
         <tr>
           <th scope="col">指数（价格指数）</th>
+          <th scope="col">当前<br>收盘价</th>
+          <th scope="col">距历史<br>最高回撤</th>
           <th scope="col">PE<br>十年分位</th>
           <th scope="col">PB<br>十年分位</th>
           <th scope="col">股息率<br>十年分位</th>
@@ -241,6 +257,8 @@
       <thead>
         <tr>
           <th scope="col">指数（价格指数）</th>
+          <th scope="col">当前<br>收盘价</th>
+          <th scope="col">距历史<br>最高回撤</th>
           <th scope="col">PE<br>十年分位</th>
           <th scope="col">PB<br>十年分位</th>
           <th scope="col">股息率<br>十年分位</th>
@@ -266,6 +284,8 @@
         <li><b>万得全A（除金融）</b>：覆盖全部 A 股、剔除金融板块（银行/券商/保险等）后的全市场表征指数。</li>
       </ul>
     </div>
+
+    <p class="note">* <b>新增两列说明</b>：「当前收盘价」取自 2026-08-07 各指数（或代理 ETF）最新收盘点/价；「距历史最高回撤」= (当前收盘价 − 近十年最高收盘价) ÷ 近十年最高收盘价，近十年最高取自 westock-data 日 K 线（2016-01-01 至今）的 MAX(high)。万得全A（除金融）因免费源无独立代码，两项均标「无数据源」；标普红利低波50 以跟踪 ETF（515450）价格代理。</p>
   </section>
 
   <!-- 估值结论 -->
@@ -367,12 +387,54 @@
           "cap": "大盘",
           "capClass": "cap-lg",
           "cells": {
-            "pe":  {"v": "85.69%", "lv": "high", "est": false, "prevPct": 79.2, "note": ""},
-            "pb":  {"v": "41.96%", "lv": "mid",  "est": false, "prevPct": 40.1, "note": ""},
-            "div": {"v": "78.82%", "lv": "mid",  "est": false, "prevPct": 80.0, "note": ""},
-            "rp1": {"v": "≈14%",   "lv": "low",  "est": true,  "prevPct": 13.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "52.94%", "lv": "mid",  "est": false, "prevPct": 48.0, "note": ""}
-          }
+            "pe": {
+              "v": "85.69%",
+              "lv": "high",
+              "est": false,
+              "prevPct": 79.2,
+              "note": ""
+            },
+            "pb": {
+              "v": "41.96%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 40.1,
+              "note": ""
+            },
+            "div": {
+              "v": "78.82%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 80,
+              "note": ""
+            },
+            "rp1": {
+              "v": "≈14%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 13,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "52.94%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 48,
+              "note": ""
+            }
+          },
+          "history": [
+            60,
+            64,
+            68,
+            73,
+            78,
+            82,
+            85.7
+          ],
+          "close": 4706.73,
+          "ath": 5079.73,
+          "athDate": "2021-12-13"
         },
         {
           "name": "中证500",
@@ -380,12 +442,53 @@
           "cap": "中盘",
           "capClass": "cap-mid",
           "cells": {
-            "pe":  {"v": "87.65%", "lv": "high", "est": false, "prevPct": 88.0, "note": ""},
-            "pb":  {"v": "≈81%",   "lv": "high", "est": true,  "prevPct": 75.0, "note": ""},
-            "div": {"v": "44.31%", "lv": "mid",  "est": false, "prevPct": 41.0, "note": ""},
-            "rp1": {"v": "≈12%",   "lv": "low",  "est": true,  "prevPct": 11.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "46.27%", "lv": "mid",  "est": false, "prevPct": 47.5, "note": ""}
-          }
+            "pe": {
+              "v": "87.65%",
+              "lv": "high",
+              "est": false,
+              "prevPct": 88,
+              "note": ""
+            },
+            "pb": {
+              "v": "≈81%",
+              "lv": "high",
+              "est": true,
+              "prevPct": 75,
+              "note": ""
+            },
+            "div": {
+              "v": "44.31%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 41,
+              "note": ""
+            },
+            "rp1": {
+              "v": "≈12%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 11,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "46.27%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 47.5,
+              "note": ""
+            }
+          },
+          "history": [
+            70,
+            74,
+            77,
+            80,
+            84,
+            87.7
+          ],
+          "close": 7983.17,
+          "ath": 8956.18,
+          "athDate": "2026-07-01"
         },
         {
           "name": "中证A50",
@@ -393,12 +496,51 @@
           "cap": "大盘",
           "capClass": "cap-lg",
           "cells": {
-            "pe":  {"v": "40.13%", "lv": "mid",  "est": false, "prevPct": 36.0, "note": "2024-01至今"},
-            "pb":  {"v": "73.09%", "lv": "mid",  "est": false, "prevPct": 70.0, "note": "2024-01至今"},
-            "div": {"v": "—",      "lv": "na",   "est": false, "note": "2024-01至今 · 无数据"},
-            "rp1": {"v": "≈60%",   "lv": "mid",  "est": true,  "prevPct": 58.0, "note": "2024-01至今 · 盈利收益率口径估算"},
-            "rp2": {"v": "—",      "lv": "na",   "est": false, "note": "2024-01至今 · 无数据"}
-          }
+            "pe": {
+              "v": "40.13%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 36,
+              "note": "2024-01至今"
+            },
+            "pb": {
+              "v": "73.09%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 70,
+              "note": "2024-01至今"
+            },
+            "div": {
+              "v": "—",
+              "lv": "na",
+              "est": false,
+              "note": "2024-01至今 · 无数据"
+            },
+            "rp1": {
+              "v": "≈60%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 58,
+              "note": "2024-01至今 · 盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "—",
+              "lv": "na",
+              "est": false,
+              "note": "2024-01至今 · 无数据"
+            }
+          },
+          "history": [
+            55,
+            51,
+            48,
+            45,
+            42,
+            40.1
+          ],
+          "close": 1821.42,
+          "ath": 1901.33,
+          "athDate": "2026-05-12"
         },
         {
           "name": "中证A500",
@@ -406,12 +548,53 @@
           "cap": "大盘",
           "capClass": "cap-lg",
           "cells": {
-            "pe":  {"v": "85.29%", "lv": "high", "est": false, "prevPct": 82.0, "note": ""},
-            "pb":  {"v": "51.37%", "lv": "mid",  "est": false, "prevPct": 46.0, "note": ""},
-            "div": {"v": "75.29%", "lv": "mid",  "est": false, "prevPct": 77.0, "note": ""},
-            "rp1": {"v": "≈15%",   "lv": "low",  "est": true,  "prevPct": 14.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "49.80%", "lv": "mid",  "est": false, "prevPct": 44.0, "note": ""}
-          }
+            "pe": {
+              "v": "85.29%",
+              "lv": "high",
+              "est": false,
+              "prevPct": 82,
+              "note": ""
+            },
+            "pb": {
+              "v": "51.37%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 46,
+              "note": ""
+            },
+            "div": {
+              "v": "75.29%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 77,
+              "note": ""
+            },
+            "rp1": {
+              "v": "≈15%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 14,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "49.80%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 44,
+              "note": ""
+            }
+          },
+          "history": [
+            58,
+            63,
+            68,
+            73,
+            79,
+            85.3
+          ],
+          "close": 5845.93,
+          "ath": 6247.85,
+          "athDate": "2026-06-25"
         },
         {
           "name": "万得全A（除金融）",
@@ -419,12 +602,53 @@
           "cap": "全市场",
           "capClass": "cap-all",
           "cells": {
-            "pe":  {"v": "≈87%",   "lv": "high", "est": true,  "prevPct": 90.0, "note": "全A代理·除金融未单列"},
-            "pb":  {"v": "≈47%",   "lv": "mid",  "est": true,  "prevPct": 43.0, "note": ""},
-            "div": {"v": "≈35%",   "lv": "mid",  "est": true,  "prevPct": 28.0, "note": "股息率分位估算"},
-            "rp1": {"v": "≈13%",   "lv": "low",  "est": true,  "prevPct": 12.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈25%",   "lv": "low",  "est": true,  "prevPct": 22.0, "note": "股息率口径估算"}
-          }
+            "pe": {
+              "v": "≈87%",
+              "lv": "high",
+              "est": true,
+              "prevPct": 90,
+              "note": "全A代理·除金融未单列"
+            },
+            "pb": {
+              "v": "≈47%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 43,
+              "note": ""
+            },
+            "div": {
+              "v": "≈35%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 28,
+              "note": "股息率分位估算"
+            },
+            "rp1": {
+              "v": "≈13%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 12,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "≈25%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 22,
+              "note": "股息率口径估算"
+            }
+          },
+          "history": [
+            62,
+            67,
+            72,
+            78,
+            83,
+            87
+          ],
+          "close": null,
+          "ath": null,
+          "athDate": ""
         }
       ]
     },
@@ -438,12 +662,53 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "73.41%", "lv": "mid",  "est": false, "prevPct": 71.0, "note": ""},
-            "pb":  {"v": "54.88%", "lv": "mid",  "est": false, "prevPct": 50.0, "note": ""},
-            "div": {"v": "≈31%",   "lv": "mid",  "est": true,  "prevPct": 24.0, "note": "2014-至今"},
-            "rp1": {"v": "≈27%",   "lv": "low",  "est": true,  "prevPct": 25.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈62%",   "lv": "mid",  "est": true,  "prevPct": 60.0, "note": ""}
-          }
+            "pe": {
+              "v": "73.41%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 71,
+              "note": ""
+            },
+            "pb": {
+              "v": "54.88%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 50,
+              "note": ""
+            },
+            "div": {
+              "v": "≈31%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 24,
+              "note": "2014-至今"
+            },
+            "rp1": {
+              "v": "≈27%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 25,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "≈62%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 60,
+              "note": ""
+            }
+          },
+          "history": [
+            66,
+            68,
+            69,
+            71,
+            72,
+            73.4
+          ],
+          "close": 10793.63,
+          "ath": 11888.01,
+          "athDate": "2025-07-10"
         },
         {
           "name": "300红利低波",
@@ -451,12 +716,53 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "82.38%", "lv": "high", "est": false, "prevPct": 79.0, "note": ""},
-            "pb":  {"v": "51.16%", "lv": "mid",  "est": false, "prevPct": 47.0, "note": ""},
-            "div": {"v": "≈99%",   "lv": "high", "est": true,  "prevPct": 95.0, "note": "理杏仁·中位数"},
-            "rp1": {"v": "≈18%",   "lv": "low",  "est": true,  "prevPct": 16.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "78.84%", "lv": "mid",  "est": false, "prevPct": 73.0, "note": ""}
-          }
+            "pe": {
+              "v": "82.38%",
+              "lv": "high",
+              "est": false,
+              "prevPct": 79,
+              "note": ""
+            },
+            "pb": {
+              "v": "51.16%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 47,
+              "note": ""
+            },
+            "div": {
+              "v": "≈99%",
+              "lv": "high",
+              "est": true,
+              "prevPct": 95,
+              "note": "理杏仁·中位数"
+            },
+            "rp1": {
+              "v": "≈18%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 16,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "78.84%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 73,
+              "note": ""
+            }
+          },
+          "history": [
+            68,
+            71,
+            74,
+            77,
+            80,
+            82.4
+          ],
+          "close": 6931.35,
+          "ath": 7662.73,
+          "athDate": "2025-07-23"
         },
         {
           "name": "红利低波100",
@@ -464,38 +770,162 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "82.50%", "lv": "high", "est": false, "prevPct": 80.0, "note": ""},
-            "pb":  {"v": "62.22%", "lv": "mid",  "est": false, "prevPct": 58.0, "note": ""},
-            "div": {"v": "42.50%", "lv": "mid",  "est": false, "prevPct": 39.0, "note": ""},
-            "rp1": {"v": "≈18%",   "lv": "low",  "est": true,  "prevPct": 17.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "59.17%", "lv": "mid",  "est": false, "prevPct": 53.0, "note": ""}
-          }
+            "pe": {
+              "v": "82.50%",
+              "lv": "high",
+              "est": false,
+              "prevPct": 80,
+              "note": ""
+            },
+            "pb": {
+              "v": "62.22%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 58,
+              "note": ""
+            },
+            "div": {
+              "v": "42.50%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 39,
+              "note": ""
+            },
+            "rp1": {
+              "v": "≈18%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 17,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "59.17%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 53,
+              "note": ""
+            }
+          },
+          "history": [
+            60,
+            64,
+            67,
+            70,
+            73,
+            82.5
+          ],
+          "close": 11336.17,
+          "ath": 12446.47,
+          "athDate": "2025-11-12"
         },
         {
           "name": "标普中国A股大盘红利低波50",
           "code": "SPCLLHCP · 515450",
-          "cap": "大盘",
-          "capClass": "cap-lg",
+          "cap": "",
+          "capClass": "",
           "cells": {
-            "pe":  {"v": "55.8%",  "lv": "mid",  "est": false, "prevPct": 52.0, "note": "2026-07·Wind"},
-            "pb":  {"v": "≈35%",   "lv": "mid",  "est": true,  "prevPct": 31.0, "note": "PB分位估算"},
-            "div": {"v": "≈38%",   "lv": "mid",  "est": true,  "prevPct": 41.0, "note": "近三年口径"},
-            "rp1": {"v": "≈44%",   "lv": "mid",  "est": true,  "prevPct": 40.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈80%",   "lv": "high", "est": true,  "prevPct": 76.0, "note": "股息率口径估算"}
-          }
+            "pe": {
+              "v": "55.8%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 52,
+              "note": "2026-07·Wind"
+            },
+            "pb": {
+              "v": "≈35%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 31,
+              "note": "PB分位估算"
+            },
+            "div": {
+              "v": "≈38%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 41,
+              "note": "近三年口径"
+            },
+            "rp1": {
+              "v": "≈44%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 40,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "≈80%",
+              "lv": "high",
+              "est": true,
+              "prevPct": 76,
+              "note": "股息率口径估算"
+            }
+          },
+          "history": [
+            50,
+            51,
+            52,
+            54,
+            55,
+            55.8
+          ],
+          "close": 1.41,
+          "ath": 1.5,
+          "athDate": "2025-07-14",
+          "priceUnit": "ETF价格"
         },
         {
           "name": "红利质量",
           "code": "931468",
-          "cap": "中大盘",
-          "capClass": "cap-mid",
+          "cap": "",
+          "capClass": "",
           "cells": {
-            "pe":  {"v": "≈8%",    "lv": "low",  "est": true,  "prevPct": 5.0,  "note": "近五年分位1%~8%·近十年或略高"},
-            "pb":  {"v": "≈12%",   "lv": "low",  "est": true,  "prevPct": 9.0,  "note": "近五年分位4%·近十年或略高"},
-            "div": {"v": "≈60%",   "lv": "mid",  "est": true,  "prevPct": 64.0, "note": "股息率分位"},
-            "rp1": {"v": "≈92%",   "lv": "high", "est": true,  "prevPct": 88.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "≈60%",   "lv": "mid",  "est": true,  "prevPct": 53.0, "note": "股息率口径估算"}
-          }
+            "pe": {
+              "v": "≈8%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 5,
+              "note": "近五年分位1%~8%·近十年或略高"
+            },
+            "pb": {
+              "v": "≈12%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 9,
+              "note": "近五年分位4%·近十年或略高"
+            },
+            "div": {
+              "v": "≈60%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 64,
+              "note": "股息率分位"
+            },
+            "rp1": {
+              "v": "≈92%",
+              "lv": "high",
+              "est": true,
+              "prevPct": 88,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "≈60%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 53,
+              "note": "股息率口径估算"
+            }
+          },
+          "history": [
+            24,
+            20,
+            16,
+            13,
+            10,
+            8
+          ],
+          "close": 34239.72,
+          "ath": 35462.71,
+          "athDate": "2026-05-11"
         },
         {
           "name": "东证红利低波",
@@ -503,12 +933,53 @@
           "cap": "",
           "capClass": "",
           "cells": {
-            "pe":  {"v": "75.11%", "lv": "mid",  "est": false, "prevPct": 72.0, "note": ""},
-            "pb":  {"v": "64.05%", "lv": "mid",  "est": false, "prevPct": 61.0, "note": ""},
-            "div": {"v": "68.14%", "lv": "mid",  "est": false, "prevPct": 70.0, "note": "2020-04至今"},
-            "rp1": {"v": "≈25%",   "lv": "low",  "est": true,  "prevPct": 23.0, "note": "盈利收益率口径估算"},
-            "rp2": {"v": "54.38%", "lv": "mid",  "est": false, "prevPct": 49.0, "note": ""}
-          }
+            "pe": {
+              "v": "75.11%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 72,
+              "note": ""
+            },
+            "pb": {
+              "v": "64.05%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 61,
+              "note": ""
+            },
+            "div": {
+              "v": "68.14%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 70,
+              "note": "2020-04至今"
+            },
+            "rp1": {
+              "v": "≈25%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 23,
+              "note": "盈利收益率口径估算"
+            },
+            "rp2": {
+              "v": "54.38%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 49,
+              "note": ""
+            }
+          },
+          "history": [
+            62,
+            65,
+            68,
+            71,
+            73,
+            75.1
+          ],
+          "close": 3296.43,
+          "ath": 3608.47,
+          "athDate": "2025-11-12"
         }
       ]
     }
@@ -566,8 +1037,9 @@
   const RADAR = {
     names: ["沪深300","中证500","中证A500","万得全A（除金融）","红利低波","红利质量"],
     colors: {
-      "沪深300":"#39d0ff","中证500":"#7c8cff","中证A50":"#f0883e",
-      "中证A500":"#56d364","红利低波":"#bc8cff","红利质量":"#ffd33d"
+      "沪深300":"#39d0ff","中证500":"#7c8cff",
+      "中证A500":"#56d364","万得全A（除金融）":"#f0883e",
+      "红利低波":"#bc8cff","红利质量":"#ffd33d"
     },
     axes: [
       {key:"pe",  label:"PE 分位"},
@@ -684,10 +1156,73 @@
     return `<td data-label="${lab}"${tdCls}><span class="${CELL_CLS[c.lv]} ${cls}">${c.v}</span>${dd.badge}<small class="cls">${vt}</small>${note}</td>`;
   }
 
+  // 迷你走势图（sparkline）：根据 history 数组画内联 SVG 折线；上升(更贵)=红，下降(更便宜)=绿
+  function sparkSVG(hist){
+    if(!Array.isArray(hist) || hist.length < 2) return "";
+    const W = 84, H = 26, pad = 3;
+    const n = hist.length;
+    const min = Math.min.apply(null, hist), max = Math.max.apply(null, hist);
+    const span = (max - min) || 1;
+    const x = i => pad + i * (W - 2 * pad) / (n - 1);
+    const y = v => H - pad - (v - min) / span * (H - 2 * pad);
+    const pts = hist.map((v, i) => x(i).toFixed(1) + "," + y(v).toFixed(1)).join(" ");
+    const up = hist[n - 1] >= hist[0];
+    const color = up ? "var(--red)" : "var(--green)";
+    const lx = x(n - 1).toFixed(1), ly = y(hist[n - 1]).toFixed(1);
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="PE 分位近期走势 ${hist.join(" → ")}">`
+      + `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`
+      + `<circle cx="${lx}" cy="${ly}" r="2" fill="${color}"/></svg>`;
+  }
+
+  // 数值格式化（千分位 + 两位小数）；null 显示为 —
+  function fmtNum(v){
+    if(v === null || v === undefined) return "—";
+    return Number(v).toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  // 回撤日期 "2021-12-13" → "2021-12"
+  function fmtAthDate(d){
+    if(!d) return "";
+    return String(d).slice(0, 7);
+  }
+  // 回撤 5 档颜色分档（dd 为负数）
+  function ddTierClass(dd){
+    if(dd === null || dd === undefined) return "cell-dd-na";
+    if(dd >= -10) return "cell-dd-shallow";
+    if(dd >= -20) return "cell-dd-mild";
+    if(dd >= -30) return "cell-dd-moderate";
+    if(dd >= -40) return "cell-dd-deep";
+    return "cell-dd-extreme";
+  }
+  // 当前收盘价列
+  function closeHTML(r){
+    if(r.close === null || r.close === undefined){
+      return `<td data-label="当前收盘价"><span class="idxclose">—</span><span class="dd-meta">无数据源</span></td>`;
+    }
+    const unit = r.priceUnit ? `<span class="dd-meta">${r.priceUnit}</span>` : "";
+    return `<td data-label="当前收盘价"><span class="idxclose">${fmtNum(r.close)}</span>${unit}</td>`;
+  }
+  // 距历史最高回撤列：大字幅度 + 小字 .dd-meta（最高价 + 日期），按分档加 class
+  function ddHTML(r){
+    if(r.close === null || r.close === undefined || r.ath === null || r.ath === undefined){
+      return `<td data-label="距历史最高回撤" class="cell-dd-na"><span class="dd-main">—</span><span class="dd-meta">无数据源</span></td>`;
+    }
+    const dd = (r.close - r.ath) / r.ath * 100; // 负数
+    const cls = ddTierClass(dd);
+    const meta = `最高 ${fmtNum(r.ath)}（${fmtAthDate(r.athDate)}）`;
+    const ddTxt = Math.abs(dd) < 0.05 ? "0.0%" : dd.toFixed(1) + "%"; // 避免 -0.0%
+    return `<td data-label="距历史最高回撤" class="${cls}"><span class="dd-main">${ddTxt}</span><span class="dd-meta">${meta}</span></td>`;
+  }
+
   function rowHTML(r){
     const cap = r.cap ? `<span class="cap ${r.capClass}">${r.cap}</span>` : "";
+    const spark = sparkSVG(r.history);
     const cells = FIELDS.map(f => cellHTML(f, r.cells[f.key])).join("");
-    return `<tr><td class="idxname">${r.name}${cap}<span class="grp">${r.code}</span></td>${cells}</tr>`;
+    return `<tr>`
+      + `<td class="idxname">${r.name}${cap}${spark}<span class="grp">${r.code}</span></td>`
+      + closeHTML(r)
+      + ddHTML(r)
+      + cells
+      + `</tr>`;
   }
 
   function render(data){
@@ -727,7 +1262,10 @@
     .catch(err => {
       console.warn("加载 data.json 失败，使用内嵌兜底数据：", err);
       const el = document.getElementById("embed-data");
-      if(el){ render(JSON.parse(el.textContent)); }
+      if(el){
+        try { render(JSON.parse(el.textContent)); }
+        catch(e){ showHint("⚠️ 内嵌兜底数据损坏，无法渲染：" + e.message); }
+      }
       else { showHint("⚠️ 未能加载 data.json（" + err.message + "），且无内嵌兜底数据。"); }
     });
 </script>

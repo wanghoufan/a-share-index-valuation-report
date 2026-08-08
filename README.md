@@ -2,32 +2,27 @@
 
 > 一份单页 HTML 报告 + 配套数据说明，汇总 **11 只 A 股核心指数**（宽基 5 只 + 红利 6 只）的十年估值分位，并以「贵 / 一般 / 便宜」统一标注，便于一眼判断当前估值水位。
 
-## 示意图
+🌐 **在线预览（部署版）**：[https://a-share-index-valuation-report.vercel.app/](https://a-share-index-valuation-report.vercel.app/)
 
-```mermaid
-flowchart LR
-    subgraph SRC[数据来源]
-      S1[当前值\n腾讯 westock-data Skill\n稳定·实时]
-      S2[十年分位\nWind / 理杏仁 / 雪球 / 同花顺\n多源公开估算]
-    end
+## 网站预览
 
-    subgraph IDX[十一大指数]
-      direction TB
-      G1[宽基指数 5只\n沪深300 · 中证500 · 中证A50\n中证A500 · 万得全A除金融]
-      G2[红利指数 6只\n红利低波 · 300红利低波 · 红利低波100\n标普红利低波50 · 红利质量 · 东证红利低波]
-    end
+> 以下为部署版页面的**真实截图**，自上而下展示：① 首页顶部 → ② 估值分位表格 → ③ 底部指数横向对比雷达图 → ④ 完整页面一览。
 
-    SRC --> IDX
-    IDX --> D[五维估值]
-    D --> D1[PE 十年分位]
-    D --> D2[PB 十年分位]
-    D --> D3[股息率 十年分位]
-    D --> D4[风险溢价·10年市盈率]
-    D --> D5[风险溢价·十年股息率]
-    D --> R[贵贱判定]
-    R --> R1[PE / PB：分位越高越贵]
-    R --> R2[股息率 / 风险溢价：分位越高越便宜]
-```
+**① 首页 / 顶部**
+
+![首页顶部](screenshots/preview-hero.png)
+
+**② 估值分位表格（向下滚动）**
+
+![估值分位表格](screenshots/preview-table.png)
+
+**③ 底部：指数横向对比雷达图**
+
+![底部雷达图](screenshots/preview-bottom.png)
+
+**④ 完整页面一览**
+
+![完整页面](screenshots/preview-full.png)
 
 ## 指数清单
 

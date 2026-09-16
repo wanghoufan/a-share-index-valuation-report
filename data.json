@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-07",
-  "dataDate": "2026-08-07",
+  "updated": "2026-09-16",
+  "dataDate": "2026-09-16",
   "groups": [
     {
       "key": "broad",
@@ -13,38 +13,38 @@
           "capClass": "cap-lg",
           "cells": {
             "pe": {
-              "v": "85.69%",
-              "lv": "high",
+              "v": "52.4%",
+              "lv": "mid",
               "est": false,
-              "prevPct": 79.2,
+              "prevPct": 85.7,
               "note": ""
             },
             "pb": {
-              "v": "41.96%",
+              "v": "37.8%",
               "lv": "mid",
               "est": false,
-              "prevPct": 40.1,
-              "note": ""
+              "prevPct": 42.0,
+              "note": "丹卷基金·估值分位"
             },
             "div": {
-              "v": "78.82%",
-              "lv": "mid",
-              "est": false,
-              "prevPct": 80,
+              "v": "≈95.5%",
+              "lv": "high",
+              "est": true,
+              "prevPct": 78.8,
               "note": ""
             },
             "rp1": {
-              "v": "≈14%",
-              "lv": "low",
+              "v": "≈48%",
+              "lv": "mid",
               "est": true,
-              "prevPct": 13,
+              "prevPct": 14.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "52.94%",
+              "v": "≈69.6%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 48,
+              "est": true,
+              "prevPct": 52.9,
               "note": ""
             }
           },
@@ -55,11 +55,14 @@
             73,
             78,
             82,
-            85.7
+            85.7,
+            51.9,
+            52.4,
+            52.4
           ],
-          "close": 4706.73,
-          "ath": 5079.73,
-          "athDate": "2021-12-13"
+          "close": 4480.27,
+          "ath": 5930.91,
+          "athDate": "2021-02-18"
         },
         {
           "name": "中证500",
@@ -68,38 +71,38 @@
           "capClass": "cap-mid",
           "cells": {
             "pe": {
-              "v": "87.65%",
-              "lv": "high",
+              "v": "74.2%",
+              "lv": "mid",
               "est": false,
-              "prevPct": 88,
+              "prevPct": 87.7,
               "note": ""
             },
             "pb": {
-              "v": "≈81%",
-              "lv": "high",
-              "est": true,
-              "prevPct": 75,
-              "note": ""
-            },
-            "div": {
-              "v": "44.31%",
+              "v": "77.2%",
               "lv": "mid",
               "est": false,
-              "prevPct": 41,
+              "prevPct": 81.0,
+              "note": "丹卷基金·估值分位"
+            },
+            "div": {
+              "v": "≈51.0%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 44.3,
               "note": ""
             },
             "rp1": {
-              "v": "≈12%",
+              "v": "≈26%",
               "lv": "low",
               "est": true,
-              "prevPct": 11,
+              "prevPct": 12.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "46.27%",
+              "v": "≈53.0%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 47.5,
+              "est": true,
+              "prevPct": 46.3,
               "note": ""
             }
           },
@@ -109,10 +112,13 @@
             77,
             80,
             84,
-            87.7
+            87.7,
+            73.1,
+            74.2,
+            74.2
           ],
-          "close": 7983.17,
-          "ath": 8956.18,
+          "close": 7683.47,
+          "ath": 9147.56,
           "athDate": "2026-07-01"
         },
         {
@@ -122,37 +128,39 @@
           "capClass": "cap-lg",
           "cells": {
             "pe": {
-              "v": "40.13%",
-              "lv": "mid",
+              "v": "16.6%",
+              "lv": "low",
               "est": false,
-              "prevPct": 36,
+              "prevPct": 40.1,
               "note": "2024-01至今"
             },
             "pb": {
-              "v": "73.09%",
+              "v": "57.5%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 70,
-              "note": "2024-01至今"
+              "est": true,
+              "prevPct": 73.1,
+              "note": "按PE分位变化联动估算"
             },
             "div": {
               "v": "—",
               "lv": "na",
               "est": false,
-              "note": "2024-01至今 · 无数据"
+              "note": "2024-01至今 · 无数据",
+              "prevPct": null
             },
             "rp1": {
-              "v": "≈60%",
-              "lv": "mid",
+              "v": "≈83%",
+              "lv": "high",
               "est": true,
-              "prevPct": 58,
-              "note": "2024-01至今 · 盈利收益率口径估算"
+              "prevPct": 60.0,
+              "note": "盈利收益率口径估算"
             },
             "rp2": {
               "v": "—",
               "lv": "na",
               "est": false,
-              "note": "2024-01至今 · 无数据"
+              "note": "2024-01至今 · 无数据",
+              "prevPct": null
             }
           },
           "history": [
@@ -161,11 +169,14 @@
             48,
             45,
             42,
-            40.1
+            40.1,
+            17.9,
+            16.6,
+            16.6
           ],
-          "close": 1821.42,
-          "ath": 1901.33,
-          "athDate": "2026-05-12"
+          "close": 1705.78,
+          "ath": 1928.87,
+          "athDate": "2026-05-14"
         },
         {
           "name": "中证A500",
@@ -174,38 +185,38 @@
           "capClass": "cap-lg",
           "cells": {
             "pe": {
-              "v": "85.29%",
-              "lv": "high",
+              "v": "48.1%",
+              "lv": "mid",
               "est": false,
-              "prevPct": 82,
-              "note": ""
+              "prevPct": 85.3,
+              "note": "2024-09至今"
             },
             "pb": {
-              "v": "51.37%",
-              "lv": "mid",
-              "est": false,
-              "prevPct": 46,
-              "note": ""
+              "v": "25.3%",
+              "lv": "low",
+              "est": true,
+              "prevPct": 51.4,
+              "note": "按PE分位变化联动估算"
             },
             "div": {
-              "v": "75.29%",
-              "lv": "mid",
-              "est": false,
-              "prevPct": 77,
+              "v": "≈93.9%",
+              "lv": "high",
+              "est": true,
+              "prevPct": 75.3,
               "note": ""
             },
             "rp1": {
-              "v": "≈15%",
-              "lv": "low",
+              "v": "≈52%",
+              "lv": "mid",
               "est": true,
-              "prevPct": 14,
+              "prevPct": 15.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "49.80%",
+              "v": "≈68.4%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 44,
+              "est": true,
+              "prevPct": 49.8,
               "note": ""
             }
           },
@@ -215,11 +226,14 @@
             68,
             73,
             79,
-            85.3
+            85.3,
+            48.1,
+            48.1,
+            48.1
           ],
-          "close": 5845.93,
-          "ath": 6247.85,
-          "athDate": "2026-06-25"
+          "close": 5537.96,
+          "ath": 6375.33,
+          "athDate": "2026-06-22"
         },
         {
           "name": "万得全A（除金融）",
@@ -231,35 +245,35 @@
               "v": "≈87%",
               "lv": "high",
               "est": true,
-              "prevPct": 90,
+              "prevPct": 87.0,
               "note": "全A代理·除金融未单列"
             },
             "pb": {
               "v": "≈47%",
               "lv": "mid",
               "est": true,
-              "prevPct": 43,
+              "prevPct": 47.0,
               "note": ""
             },
             "div": {
               "v": "≈35%",
               "lv": "mid",
               "est": true,
-              "prevPct": 28,
+              "prevPct": 35.0,
               "note": "股息率分位估算"
             },
             "rp1": {
               "v": "≈13%",
               "lv": "low",
               "est": true,
-              "prevPct": 12,
+              "prevPct": 13.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
               "v": "≈25%",
               "lv": "low",
               "est": true,
-              "prevPct": 22,
+              "prevPct": 25.0,
               "note": "股息率口径估算"
             }
           },
@@ -288,38 +302,38 @@
           "capClass": "",
           "cells": {
             "pe": {
-              "v": "73.41%",
+              "v": "73.4%",
               "lv": "mid",
               "est": false,
-              "prevPct": 71,
+              "prevPct": 73.4,
               "note": ""
             },
             "pb": {
-              "v": "54.88%",
+              "v": "61.3%",
               "lv": "mid",
               "est": false,
-              "prevPct": 50,
-              "note": ""
+              "prevPct": 54.9,
+              "note": "丹卷基金·估值分位"
             },
             "div": {
-              "v": "≈31%",
+              "v": "≈31.0%",
               "lv": "mid",
               "est": true,
-              "prevPct": 24,
+              "prevPct": 31.0,
               "note": "2014-至今"
             },
             "rp1": {
               "v": "≈27%",
               "lv": "low",
               "est": true,
-              "prevPct": 25,
+              "prevPct": 27.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "≈62%",
+              "v": "≈62.0%",
               "lv": "mid",
               "est": true,
-              "prevPct": 60,
+              "prevPct": 62.0,
               "note": ""
             }
           },
@@ -329,11 +343,14 @@
             69,
             71,
             72,
+            73.4,
+            75.3,
+            73.4,
             73.4
           ],
-          "close": 10793.63,
-          "ath": 11888.01,
-          "athDate": "2025-07-10"
+          "close": 10931.94,
+          "ath": 12140.74,
+          "athDate": "2024-10-08"
         },
         {
           "name": "300红利低波",
@@ -342,38 +359,38 @@
           "capClass": "",
           "cells": {
             "pe": {
-              "v": "82.38%",
+              "v": "89.6%",
               "lv": "high",
               "est": false,
-              "prevPct": 79,
+              "prevPct": 82.4,
               "note": ""
             },
             "pb": {
-              "v": "51.16%",
+              "v": "42.4%",
               "lv": "mid",
               "est": false,
-              "prevPct": 47,
-              "note": ""
+              "prevPct": 51.2,
+              "note": "丹卷基金·估值分位"
             },
             "div": {
-              "v": "≈99%",
+              "v": "≈95.4%",
               "lv": "high",
               "est": true,
-              "prevPct": 95,
+              "prevPct": 99.0,
               "note": "理杏仁·中位数"
             },
             "rp1": {
-              "v": "≈18%",
+              "v": "≈10%",
               "lv": "low",
               "est": true,
-              "prevPct": 16,
+              "prevPct": 18.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "78.84%",
+              "v": "≈75.2%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 73,
+              "est": true,
+              "prevPct": 78.8,
               "note": ""
             }
           },
@@ -383,11 +400,14 @@
             74,
             77,
             80,
-            82.4
+            82.4,
+            91.8,
+            89.6,
+            89.6
           ],
-          "close": 6931.35,
-          "ath": 7662.73,
-          "athDate": "2025-07-23"
+          "close": 6983.47,
+          "ath": 8203.67,
+          "athDate": "2024-10-08"
         },
         {
           "name": "红利低波100",
@@ -396,38 +416,38 @@
           "capClass": "",
           "cells": {
             "pe": {
-              "v": "82.50%",
-              "lv": "high",
+              "v": "76.1%",
+              "lv": "mid",
               "est": false,
-              "prevPct": 80,
+              "prevPct": 82.5,
               "note": ""
             },
             "pb": {
-              "v": "62.22%",
+              "v": "58.3%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 58,
-              "note": ""
+              "est": true,
+              "prevPct": 62.2,
+              "note": "按PE分位变化联动估算"
             },
             "div": {
-              "v": "42.50%",
+              "v": "≈45.7%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 39,
+              "est": true,
+              "prevPct": 42.5,
               "note": ""
             },
             "rp1": {
-              "v": "≈18%",
+              "v": "≈24%",
               "lv": "low",
               "est": true,
-              "prevPct": 17,
+              "prevPct": 18.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "59.17%",
+              "v": "≈62.4%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 53,
+              "est": true,
+              "prevPct": 59.2,
               "note": ""
             }
           },
@@ -437,11 +457,14 @@
             67,
             70,
             73,
-            82.5
+            82.5,
+            76.9,
+            76.1,
+            76.1
           ],
-          "close": 11336.17,
-          "ath": 12446.47,
-          "athDate": "2025-11-12"
+          "close": 11198.0,
+          "ath": 12886.6,
+          "athDate": "2024-10-08"
         },
         {
           "name": "标普中国A股大盘红利低波50",
@@ -453,35 +476,35 @@
               "v": "55.8%",
               "lv": "mid",
               "est": false,
-              "prevPct": 52,
+              "prevPct": 55.8,
               "note": "2026-07·Wind"
             },
             "pb": {
               "v": "≈35%",
               "lv": "mid",
               "est": true,
-              "prevPct": 31,
+              "prevPct": 35.0,
               "note": "PB分位估算"
             },
             "div": {
               "v": "≈38%",
               "lv": "mid",
               "est": true,
-              "prevPct": 41,
+              "prevPct": 38.0,
               "note": "近三年口径"
             },
             "rp1": {
               "v": "≈44%",
               "lv": "mid",
               "est": true,
-              "prevPct": 40,
+              "prevPct": 44.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
               "v": "≈80%",
               "lv": "high",
               "est": true,
-              "prevPct": 76,
+              "prevPct": 80.0,
               "note": "股息率口径估算"
             }
           },
@@ -493,9 +516,9 @@
             55,
             55.8
           ],
-          "close": 1.41,
-          "ath": 1.5,
-          "athDate": "2025-07-14",
+          "close": 1.396,
+          "ath": 1.59,
+          "athDate": "2024-10-08",
           "priceUnit": "ETF价格"
         },
         {
@@ -505,38 +528,38 @@
           "capClass": "",
           "cells": {
             "pe": {
-              "v": "≈8%",
-              "lv": "low",
-              "est": true,
-              "prevPct": 5,
-              "note": "近五年分位1%~8%·近十年或略高"
+              "v": "37.0%",
+              "lv": "mid",
+              "est": false,
+              "prevPct": 8.0,
+              "note": "近五年分位"
             },
             "pb": {
-              "v": "≈12%",
-              "lv": "low",
-              "est": true,
-              "prevPct": 9,
-              "note": "近五年分位4%·近十年或略高"
-            },
-            "div": {
-              "v": "≈60%",
+              "v": "32.4%",
               "lv": "mid",
               "est": true,
-              "prevPct": 64,
+              "prevPct": 12.0,
+              "note": "按PE分位变化联动估算"
+            },
+            "div": {
+              "v": "≈45.5%",
+              "lv": "mid",
+              "est": true,
+              "prevPct": 60.0,
               "note": "股息率分位"
             },
             "rp1": {
-              "v": "≈92%",
-              "lv": "high",
+              "v": "≈63%",
+              "lv": "mid",
               "est": true,
-              "prevPct": 88,
+              "prevPct": 92.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "≈60%",
+              "v": "≈45.5%",
               "lv": "mid",
               "est": true,
-              "prevPct": 53,
+              "prevPct": 60.0,
               "note": "股息率口径估算"
             }
           },
@@ -546,11 +569,14 @@
             16,
             13,
             10,
-            8
+            8,
+            37.1,
+            37.0,
+            37.0
           ],
-          "close": 34239.72,
-          "ath": 35462.71,
-          "athDate": "2026-05-11"
+          "close": 32674.38,
+          "ath": 36155.17,
+          "athDate": "2021-06-08"
         },
         {
           "name": "东证红利低波",
@@ -559,38 +585,38 @@
           "capClass": "",
           "cells": {
             "pe": {
-              "v": "75.11%",
+              "v": "70.9%",
               "lv": "mid",
               "est": false,
-              "prevPct": 72,
+              "prevPct": 75.1,
               "note": ""
             },
             "pb": {
-              "v": "64.05%",
+              "v": "62.4%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 61,
-              "note": ""
+              "est": true,
+              "prevPct": 64.0,
+              "note": "按PE分位变化联动估算"
             },
             "div": {
-              "v": "68.14%",
+              "v": "≈70.2%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 70,
+              "est": true,
+              "prevPct": 68.1,
               "note": "2020-04至今"
             },
             "rp1": {
-              "v": "≈25%",
+              "v": "≈29%",
               "lv": "low",
               "est": true,
-              "prevPct": 23,
+              "prevPct": 25.0,
               "note": "盈利收益率口径估算"
             },
             "rp2": {
-              "v": "54.38%",
+              "v": "≈56.5%",
               "lv": "mid",
-              "est": false,
-              "prevPct": 49,
+              "est": true,
+              "prevPct": 54.4,
               "note": ""
             }
           },
@@ -600,11 +626,14 @@
             68,
             71,
             73,
-            75.1
+            75.1,
+            72.7,
+            70.9,
+            70.9
           ],
-          "close": 3296.43,
-          "ath": 3608.47,
-          "athDate": "2025-11-12"
+          "close": 3343.36,
+          "ath": 3663.87,
+          "athDate": "2024-10-08"
         }
       ]
     }
